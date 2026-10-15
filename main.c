@@ -3,7 +3,60 @@
 //INCLUDES
 #include <stdio.h>
 
+
+//STRUKTÚRÁK
+typedef struct {
+    int id;
+    char nev[50];
+} osszetevo;
+
+typedef struct {
+    int id;
+    char nev[50];
+    osszetevo osszetevok[50];
+    char mértekegysegek[50][20];
+    char leiras[2000];
+} recept;
+
+
 //FUNCTIONS
+void load_recipes(recept receptek[1000]) //receptek töltése file-ból a tömbbe
+{
+    FILE *file = fopen("receptek.txt", "r");
+    if(file==NULL)
+    {
+        printf("Nem található elmentett recept.");
+        return;
+    }
+    char sor[3000];
+    int i=0;
+    while(fgets(sor,sizeof(sor),file)!=NULL)
+    {
+        switch(sor[0]){
+            case '1':
+                //id,nev
+                break;
+            case '2':
+                //osszetevok
+                break;
+            case '3':
+                //mertekegyseg
+                break;
+            case '4':
+                //leiras
+                break;
+            default:
+                printf("Nem található kezdeti érték.");
+                break;
+        }
+    }
+}
+
+void save_recipes(recept receptek[1000])
+{
+
+}
+
 void print_recipe()
 {
 
@@ -49,9 +102,13 @@ void keres_tobbanyag()
 int main()
 {
     //Változók
-    int valasztas;
+    int valasztas; //GUI választás
+    recept receptek[1000]; //Receptek tömbje
 
-    //Struktúrák
+
+
+    //Receptek betöltése
+    load_recipes(receptek);
     
 
     do 
