@@ -14,7 +14,7 @@ typedef struct {
     int id;
     char nev[50];
     osszetevo osszetevok[50];
-    char mértekegysegek[50][20];
+    char mertek[50][20];
     char leiras[2000];
 } recept;
 
@@ -34,16 +34,22 @@ void load_recipes(recept receptek[1000]) //receptek töltése file-ból a tömbb
     {
         switch(sor[0]){
             case '1':
-                //id,nev
+                sscanf(sor, "%d %49s", &receptek[i].id, receptek[i].nev);
                 break;
             case '2':
-                //osszetevok
+                for(int i=sizeof(sor)-1; i>=0; i--)
+                {
+                    sscanf(sor[i], "%d %49s", &receptek[i].osszetevok[i].id, receptek[i].osszetevok[i].nev);
+                }
                 break;
             case '3':
-                //mertekegyseg
+                for(int i=sizeof(sor)-1; i>=0; i--)
+                {
+                    sscanf(sor[i], "%49s", receptek[i].mertek[i]);
+                }
                 break;
             case '4':
-                //leiras
+                sscanf(sor, "%1999", receptek[i].leiras);
                 break;
             default:
                 printf("Nem található kezdeti érték.");
