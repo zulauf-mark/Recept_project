@@ -13,54 +13,75 @@ typedef struct {
 typedef struct {
     int id;
     char nev[50];
+    int osszetevokszama;
     osszetevo osszetevok[50];
     char mertek[50][20];
     char leiras[2000];
 } recept;
+
+//GLOBÁLIS VÁLTOZÓK
+int db=0;
 
 
 //FUNCTIONS
 void load_recipes(recept receptek[1000]) //receptek töltése file-ból a tömbbe
 {
     FILE *file = fopen("receptek.txt", "r");
+
     if(file==NULL)
     {
         printf("Nem található elmentett recept.");
         return;
     }
     char sor[3000];
-    int i=0;
+    
     while(fgets(sor,sizeof(sor),file)!=NULL)
-    {
+    {   
+        int osszetevoszam=0;
         switch(sor[0]){
             case '1':
-                sscanf(sor, "%d %49s", &receptek[i].id, receptek[i].nev);
+                sscanf(sor, "%d %49s", &receptek[db].id, &receptek[db].nev);
                 break;
             case '2':
-                for(int i=sizeof(sor)-1; i>=0; i--)
-                {
-                    sscanf(sor[i], "%d %49s", &receptek[i].osszetevok[i].id, receptek[i].osszetevok[i].nev);
-                }
-                break;
+                sscanf(sor[1], "%d", &receptek[db].osszetevokszama);
+                osszetevoszam=receptek[db].osszetevokszama;
             case '3':
-                for(int i=sizeof(sor)-1; i>=0; i--)
+                for(int i=0;i<osszetevoszam+1; i++)
                 {
-                    sscanf(sor[i], "%49s", receptek[i].mertek[i]);
+                    sscanf(sor[i], "%d%49s", &receptek[db].osszetevok[i].id, &receptek[db].osszetevok[i].nev);
                 }
                 break;
             case '4':
-                sscanf(sor, "%1999", receptek[i].leiras);
+                for(int i=0; i<osszetevoszam; i++)
+                {
+                    sscanf(sor[db], "%49s", &receptek[db].mertek[i]);
+                }
+                break;
+            case '5':
+                sscanf(sor, "%1999", &receptek[db].leiras);
                 break;
             default:
                 printf("Nem található kezdeti érték.");
                 break;
         }
     }
+    db++;
 }
 
-void save_recipes(recept receptek[1000])
+void save_recipes(recept receptek[100],int db)
 {
+    FILE *file = fopen("receptek.txt", "w");
 
+    for(int i=0;i<db+1;i++)
+    {
+        printf("1 %d %49s\n", receptek[i].id,receptek[i].nev);
+        printf("2 %d\n", receptek[db].osszetevokszama);
+        printf("3 ");
+        for(int i=0;i<receptek[db].osszetevokszama;i++)
+        {
+            printf("%d%49s ",receptek[db].osszetevok.id, receptek[db].osszetevok.id);
+        }
+    }
 }
 
 void print_recipe()
@@ -70,7 +91,7 @@ void print_recipe()
 
 void new_recipe()
 {
-    
+    db++;
 }
 
 void new_osszetevo()
