@@ -5,22 +5,23 @@
 
 
 //STRUKTÚRÁK
-typedef struct {
+typedef struct { //összetevő struktúra
     int id;
-    char nev[50];
+    char nev[50+1];
 } osszetevo;
 
-typedef struct {
+typedef struct { //recept struktúra
     int id;
-    char nev[50];
+    char nev[50+1];
     int osszetevokszama;
     osszetevo osszetevok[50];
-    char mertek[50][20];
-    char leiras[2000];
+    char mertek[50][20+1];
+    char leiras[2000+1];
 } recept;
 
 //GLOBÁLIS VÁLTOZÓK
 int db=0;
+recept receptek[1000];
 
 
 //FUNCTIONS
@@ -40,25 +41,26 @@ void load_recipes(recept receptek[1000]) //receptek töltése file-ból a tömbb
         int osszetevoszam=0;
         switch(sor[0]){
             case '1':
-                sscanf(sor, "%d %49s", &receptek[db].id, &receptek[db].nev);
+                sscanf(sor, "%d %50s", &receptek[db].id, &receptek[db].nev);
                 break;
             case '2':
                 sscanf(sor[1], "%d", &receptek[db].osszetevokszama);
                 osszetevoszam=receptek[db].osszetevokszama;
+                break;
             case '3':
-                for(int i=0;i<osszetevoszam+1; i++)
+                for(int i=1;i<osszetevoszam+1; i++)
                 {
-                    sscanf(sor[i], "%d%49s", &receptek[db].osszetevok[i].id, &receptek[db].osszetevok[i].nev);
+                    sscanf(sor[i], "%d_%50s", &receptek[db].osszetevok[i].id, &receptek[db].osszetevok[i].nev);
                 }
                 break;
             case '4':
-                for(int i=0; i<osszetevoszam; i++)
+                for(int i=1; i<osszetevoszam+1; i++)
                 {
-                    sscanf(sor[db], "%49s", &receptek[db].mertek[i]);
+                    sscanf(sor[i], "%50s", &receptek[db].mertek[i]);
                 }
                 break;
             case '5':
-                sscanf(sor, "%1999", &receptek[db].leiras);
+                sscanf(sor, "%2000s", &receptek[db].leiras);
                 break;
             default:
                 printf("Nem található kezdeti érték.");
@@ -68,24 +70,47 @@ void load_recipes(recept receptek[1000]) //receptek töltése file-ból a tömbb
     db++;
 }
 
-void save_recipes(recept receptek[100],int db)
+void save_recipes(recept receptek[100],int db) //receptek mentése tömbből file-ba
 {
     FILE *file = fopen("receptek.txt", "w");
 
     for(int i=0;i<db+1;i++)
     {
-        printf("1 %d %49s\n", receptek[i].id,receptek[i].nev);
+        printf("1 %d %50s\n", receptek[i].id,receptek[i].nev);
         printf("2 %d\n", receptek[db].osszetevokszama);
         printf("3 ");
-        for(int i=0;i<receptek[db].osszetevokszama;i++)
+        for(int j=0;j<receptek[db].osszetevokszama;j++)
         {
-            printf("%d%49s ",receptek[db].osszetevok.id, receptek[db].osszetevok.id);
+            printf("%d%50s ",receptek[db].osszetevok[j].id, receptek[db].osszetevok[j].nev);
         }
+        printf("4 ");
+        for(int j=0;j<receptek[db].osszetevokszama;j++)
+        {
+            printf("%20s ",receptek[db].mertek[j]);
+        }
+        printf("\n5 %2000s\n",receptek[db].leiras);
     }
 }
 
-void print_recipe()
+void print_recipe(int recipeid)//recept kirása a konzolra id alapján
 {
+    //recept keresése
+    recept ki;
+    for(int i=0;i<db;i++)
+    {
+        if(receptek[i].id==recipeid)
+        {
+            ki=receptek[i];
+        }
+    }
+
+    //formatted output
+    printf("%d %50s");
+    for(int i=0;i<ki.osszetevokszama;i++)
+    {
+        printf("|%50s %20s\n",ki.osszetevok[i].nev, ki.mertek[i]);
+    }
+    printf("%2000s\n",ki.leiras);
 
 }
 
