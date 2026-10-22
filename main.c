@@ -118,10 +118,10 @@ void print_recipe(int recipeid)//recept kirása a konzolra id alapján
     }
 
     //formatted output
-    printf("%d %50s");
+    printf("%d %50s", ki.id,ki.nev);
     for(int i=0;i<ki.osszetevokszama;i++)
     {
-        printf("|%50s %20s\n",ki.osszetevok[i].nev, ki.mertek[i]);
+        printf("%d", ki.osszetevoid[i]);
     }
     printf("%2000s\n",ki.leiras);
 
