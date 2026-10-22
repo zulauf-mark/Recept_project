@@ -2,6 +2,8 @@
 
 //INCLUDES
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 
 //STRUKTÚRÁK
@@ -14,7 +16,7 @@ typedef struct { //recept struktúra
     int id;
     char nev[50+1];
     int osszetevokszama;
-    osszetevo osszetevok[50];
+    int osszetevoid[50];
     char mertek[50][20+1];
     char leiras[2000+1];
 } recept;
@@ -22,9 +24,20 @@ typedef struct { //recept struktúra
 //GLOBÁLIS VÁLTOZÓK
 int db=0;
 recept receptek[1000];
+osszetevo osszetevok[1000];
 
 
 //FUNCTIONS
+void load_osszetevok()
+{
+
+}
+
+void save_osszetevok()
+{
+
+}
+
 void load_recipes(recept receptek[1000]) //receptek töltése file-ból a tömbbe
 {
     FILE *file = fopen("receptek.txt", "r");
@@ -50,7 +63,7 @@ void load_recipes(recept receptek[1000]) //receptek töltése file-ból a tömbb
             case '3':
                 for(int i=1;i<osszetevoszam+1; i++)
                 {
-                    sscanf(sor[i], "%d_%50s", &receptek[db].osszetevok[i].id, &receptek[db].osszetevok[i].nev);
+                    sscanf(sor[i], "%d", &receptek[db].osszetevoid[i]);
                 }
                 break;
             case '4':
@@ -81,7 +94,7 @@ void save_recipes(recept receptek[100],int db) //receptek mentése tömbből fil
         printf("3 ");
         for(int j=0;j<receptek[db].osszetevokszama;j++)
         {
-            printf("%d%50s ",receptek[db].osszetevok[j].id, receptek[db].osszetevok[j].nev);
+            printf("%d ",receptek[db].osszetevoid[j]);
         }
         printf("4 ");
         for(int j=0;j<receptek[db].osszetevokszama;j++)
@@ -129,14 +142,31 @@ void delete_recipe()
 
 }
 
-void keres_nev()
+void keres_nev()// recept keresése név alapján
 {
-
+    char nev[50+1];
+    printf("Adja meg a recept nevet: ");
+    scanf("%50s", nev);
+    for(int i=0;i<db;i++)
+    {
+        if(receptek[i].nev==nev)
+        {
+            print_recipe(receptek[i].id);
+        }
+    }
 }
 
-void keres_random()
+void keres_random()//random recept keresése amíg a felhasználó el nem fogadja
 {
-
+    char accept;
+    while(accept!='y')
+    {
+        srand(time(NULL));
+        int random = rand() % db;
+        print_recipe(random);
+        printf("Tetszik ez a recept? (y/n): ");
+        scanf(" %c", &accept);
+    }
 }
 
 void keres_1anyag()
