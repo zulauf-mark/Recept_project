@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
+#include <string.h>
 
 //STRUKTÚRÁK
 typedef struct { //összetevő struktúra
@@ -12,124 +12,116 @@ typedef struct { //összetevő struktúra
     char nev[50+1];
 } osszetevo;
 
+typedef struct {
+    int osszetevo_id;
+    double mennyiseg;
+    char mertekegyseg;
+} hozzavalo;
+
 typedef struct { //recept struktúra
     int id;
     char nev[50+1];
-    int osszetevokszama;
-    int osszetevoid[50];
-    char mertek[50][20+1];
     char leiras[2000+1];
+    int elkeszitesi_ido;
+
+    hozzavalo *hozzavalok;
+    int hozzavalo_db;
 } recept;
 
 //GLOBÁLIS VÁLTOZÓK
-int db=0;
-recept receptek[1000];
-osszetevo osszetevok[1000];
+int recept_db=0;
+int osszetevo_db=0;
+recept *receptek=NULL;
+osszetevo *osszetevok=NULL;
 
 
 //FUNCTIONS
-void load_osszetevok()
+void load_data()//receptek és összetevők betöltése fileból, formázott alakból dinamikus tömbbe
 {
-
-}
-
-void save_osszetevok()
-{
-
-}
-
-void load_recipes(recept receptek[1000]) //receptek töltése file-ból a tömbbe
-{
-    FILE *file = fopen("receptek.txt", "r");
-
-    if(file==NULL)
+    FILE *file1 = fopen("receptek.txt", "r");//receptek betöltése
+    if(file1==NULL)
     {
-        printf("Nem található elmentett recept.");
+        printf("Még nincs recept az adatbazisban!\n");
         return;
     }
-    char sor[3000];
-    
-    while(fgets(sor,sizeof(sor),file)!=NULL)
-    {   
-        int osszetevoszam=0;
-        switch(sor[0]){
-            case '1':
-                sscanf(sor, "%d %50s", &receptek[db].id, &receptek[db].nev);
-                break;
-            case '2':
-                sscanf(sor[1], "%d", &receptek[db].osszetevokszama);
-                osszetevoszam=receptek[db].osszetevokszama;
-                break;
-            case '3':
-                for(int i=1;i<osszetevoszam+1; i++)
-                {
-                    sscanf(sor[i], "%d", &receptek[db].osszetevoid[i]);
-                }
-                break;
-            case '4':
-                for(int i=1; i<osszetevoszam+1; i++)
-                {
-                    sscanf(sor[i], "%50s", &receptek[db].mertek[i]);
-                }
-                break;
-            case '5':
-                sscanf(sor, "%2000s", &receptek[db].leiras);
-                break;
-            default:
-                printf("Nem található kezdeti érték.");
-                break;
-        }
-    }
-    db++;
-}
-
-void save_recipes(recept receptek[100],int db) //receptek mentése tömbből file-ba
-{
-    FILE *file = fopen("receptek.txt", "w");
-
-    for(int i=0;i<db+1;i++)
+    char line[2000];
+    int line_num=0;
+    while(fgets(line, sizeof(line), file1) && line != NULL)
     {
-        printf("1 %d %50s\n", receptek[i].id,receptek[i].nev);
-        printf("2 %d\n", receptek[db].osszetevokszama);
-        printf("3 ");
-        for(int j=0;j<receptek[db].osszetevokszama;j++)
+        recept current_recipe={.id=0, .nev="", .leiras="", .elkeszitesi_ido=0, .hozzavalok=NULL, .hozzavalo_db=0};
+        if(line_num==0)
         {
-            printf("%d ",receptek[db].osszetevoid[j]);
+            sscanf(line, "%d\n", &recept_db);
+            line_num++;
         }
-        printf("4 ");
-        for(int j=0;j<receptek[db].osszetevokszama;j++)
+        else
         {
-            printf("%20s ",receptek[db].mertek[j]);
+            switch(line_num)
+            {
+                case 1://Cím, név, elkészítési idő beolvasása
+                    sscanf(line, "%d|%[^|]|%d\n", &current_recipe.id, current_recipe.nev, &current_recipe.elkeszitesi_ido);
+                    line_num++;
+                    break;
+                case 2://Leírás beolvasása
+                    sscanf(line, "%[^\\n]\n", current_recipe.leiras);
+                    line_num++;
+                    break;
+                case 3://Hozzávalók számának beolvasása és memóriafoglalás
+                    sscanf(line, "%d\n", &current_recipe.hozzavalo_db);
+                    current_recipe.hozzavalok = malloc(current_recipe.hozzavalo_db * sizeof(hozzavalo));
+                    line_num++;
+                    break;
+                case 4://Hozzávalók beolvasása és recept hozzáadása a tömbhöz
+                    for(int i=0; i<current_recipe.hozzavalo_db; i++)
+                    {
+                        sscanf(line, "%d|%lf|%c\n", &current_recipe.hozzavalok[i].osszetevo_id, &current_recipe.hozzavalok[i].mennyiseg, &current_recipe.hozzavalok[i].mertekegyseg);
+                        fgets(line, sizeof(line), file1);
+                    }
+                    receptek = realloc(receptek, (recept_db + 1) * sizeof(recept));
+                    receptek[recept_db] = current_recipe;
+                    line_num = 1;
+                    break;
+            }
         }
-        printf("\n5 %2000s\n",receptek[db].leiras);
     }
+    fclose(file1);
+
+    FILE *file2 = fopen("osszetevok.txt", "r");//összetevők betöltése
+    if(file2==NULL)
+    {
+        printf("Még nincs összetevő az adatbazisban!\n");
+        return;
+    }
+    while(fgets(line, sizeof(line), file2) && line!=NULL)
+    {
+        osszetevo current_osszetevo={.id=0, .nev=""};
+        sscanf(line, "%d|%[^|]\n", &current_osszetevo.id, &current_osszetevo.nev);
+        osszetevok = realloc(osszetevok, (osszetevo_db + 1) * sizeof(osszetevo));
+        osszetevok[osszetevo_db] = current_osszetevo;
+        osszetevo_db++;
+        break;
+    }
+
+
 }
+
+void save_data()// receptek és összetevők mentése fileba, formázott alakban tömbből
+{
+    
+}
+
 
 void print_recipe(int recipeid)//recept kirása a konzolra id alapján
 {
     //recept keresése
     recept ki;
-    for(int i=0;i<db;i++)
-    {
-        if(receptek[i].id==recipeid)
-        {
-            ki=receptek[i];
-        }
-    }
-
-    //formatted output
-    printf("%d %50s", ki.id,ki.nev);
-    for(int i=0;i<ki.osszetevokszama;i++)
-    {
-        printf("%d", ki.osszetevoid[i]);
-    }
-    printf("%2000s\n",ki.leiras);
+    
 
 }
 
 void new_recipe()
 {
-    db++;
+    
 }
 
 void new_osszetevo()
