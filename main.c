@@ -12,7 +12,7 @@ typedef struct { //összetevő struktúra
     char nev[50+1];
 } osszetevo;
 
-typedef struct {
+typedef struct {//hozzávaló struktúra
     int osszetevo_id;
     double mennyiseg;
     char mertekegyseg;
@@ -41,7 +41,7 @@ void load_data()//receptek és összetevők betöltése fileból, formázott ala
     FILE *file1 = fopen("receptek.txt", "r");//receptek betöltése
     if(file1==NULL)
     {
-        printf("Még nincs recept az adatbazisban!\n");
+        printf("Meg nincs recept az adatbazisban!\n");
         return;
     }
     char line[2000];
@@ -110,7 +110,7 @@ void save_data()// receptek és összetevők mentése fileba, formázott alakban
     FILE *file1 = fopen("receptek.txt", "w");//receptek mentése
     if(sizeof(receptek)==0)
     {
-        printf("Nincs menthető recept az adatbazisban!\n");
+        printf("Nincs mentheto recept az adatbazisban!\n");
         return;
     }
     fprintf(file1, "%d\n", recept_db);
@@ -201,7 +201,7 @@ void keres_nev()// recept keresése név alapján
     char nev[50+1];
     printf("Adja meg a recept nevet: ");
     scanf("%50s", nev);
-    for(int i=0;i<db;i++)
+    for(int i=0;i<recept_db;i++)
     {
         if(receptek[i].nev==nev)
         {
@@ -216,7 +216,7 @@ void keres_random()//random recept keresése amíg a felhasználó el nem fogadj
     while(accept!='y')
     {
         srand(time(NULL));
-        int random = rand() % db;
+        int random = rand() % recept_db;
         print_recipe(random);
         printf("Tetszik ez a recept? (y/n): ");
         scanf(" %c", &accept);
@@ -239,12 +239,11 @@ int main()
 {
     //Változók
     int valasztas; //GUI választás
-    recept receptek[1000]; //Receptek tömbje
 
 
 
     //Receptek betöltése
-    load_recipes(receptek);
+    load_data();
     
 
     do 
