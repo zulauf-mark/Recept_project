@@ -190,7 +190,7 @@ void new_osszetevo()
 
 }
 
-void delete_one_from_tomb(int index, int *tomb_meret, recept *tomb)
+void delete_one_from_tomb(int index, int *tomb_meret, recept *tomb)//egy elem törlése a tömbből index alapján
 {
     if (index < 0 || index >= *tomb_meret) 
     {
@@ -206,33 +206,59 @@ void delete_one_from_tomb(int index, int *tomb_meret, recept *tomb)
     *tomb_meret--;
 }
 
-void delete_recipe()
+void delete_recipe()//recept törlése id alapján
 {
-
+    int id;
+    printf("Adja meg a torlendo recept ID-jat:\n(-1 a megszakitas)\n");
+    scanf("%d", &id);
+    if(id==-1)
+    {
+        printf("A recept torlese megszakitva!\n");
+        return;
+    }
+    for(int i=0;i<recept_db;i++)
+    {
+        if(receptek[i].id==id)
+        {
+            delete_one_from_tomb(i, &recept_db, receptek);
+            printf("A recept sikeresen torolve lett!\n");
+            return;
+        }
+    }
+    printf("Nincs ilyen ID-ju recept az adatbazisban!\n");
 }
 
 void keres_nev()// recept keresése név vagy annak részlete alapján
 {
     char nev[50+1];
+    int id;
     printf("Adja meg a recept nevet: ");
     scanf("%50s", nev);
     for(int i=0;i<recept_db;i++)
     {
         if(strstr(receptek[i].nev, nev) != NULL)
         {
-            print_recipe(receptek[i].id);
+            printf("Recept neve: %d. %s\n", receptek[i].id, receptek[i].nev);
         }
         else
         {
             printf("Nincs ilyen nevű recept az adatbázisban!\n");
         }
     }
+    printf("Adja meg a recept ID-ját a részletekhez:\n(-1 a megszakitas)\n");
+    if(scanf("%d", &id) == -1)
+    {
+        printf("A keresés megszakítva!\n");
+        return;
+    }
+    print_recipe(id);
 }
 
 void keres_random()//random recept keresése amíg a felhasználó el nem fogadja
 {
     char accept;
     recept recept_halmaz[recept_db];
+    int delete_index, random,halmaz_meret=recept_db;
     for(int i=0;i<recept_db;i++)
     {
         recept_halmaz[i]=receptek[i];
@@ -240,11 +266,25 @@ void keres_random()//random recept keresése amíg a felhasználó el nem fogadj
     while(accept!='y')
     {
         srand(time(NULL));
-        int random = rand() % recept_db;
-        print_recipe(random);
-        printf("Tetszik ez a recept? (y/n): ");
-        scanf(" %c", &accept);
+        random = rand() % halmaz_meret;
+        printf("Recept neve: %s\n", recept_halmaz[random].nev);
+        printf("Tetszik ez a recept? (y/n):\n(-1 a megszakitas)\n");
+        if(scanf(" %c", &accept) == '-1')
+        {
+            printf("A keresés megszakítva!\n");
+            return;
+        }
+
+        delete_index=random;
+        delete_one_from_tomb(delete_index, &recept_db, recept_halmaz);
+        halmaz_meret--;
+        if(halmaz_meret==0)
+        {
+            printf("Nincs további recept!\n");
+            break;
+        }
     }
+    print_recipe(random);
 }
 
 void keres_1anyag()
@@ -255,6 +295,22 @@ void keres_1anyag()
 void keres_tobbanyag()
 {
 
+}
+
+void list_recipes()//összes recept kiírása
+{
+    int id;
+    for(int i=0;i<recept_db;i++)
+    {
+        printf("%d. %s\n", receptek[i].id, receptek[i].nev);
+    }
+    printf("Adja meg a recept ID-ját a részletekhez:\n(-1 a megszakitas)\n");
+    if(scanf("%d", &id) == -1)
+    {
+        printf("A keresés megszakítva!\n");
+        return;
+    }
+    print_recipe(id);
 }
 
 
@@ -282,6 +338,7 @@ int main()
         printf("5. De ennek egy kis...\n");
         printf("6. El kell hasznalni\n");
         printf("7. Osszetevo hozzaadasa\n");
+        printf("8. Receptek listazasa\n");
         printf("0. Kilepes\n");
 
         printf("Valasztas: ");
