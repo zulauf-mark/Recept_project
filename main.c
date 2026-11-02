@@ -107,7 +107,37 @@ void load_data()//receptek és összetevők betöltése fileból, formázott ala
 
 void save_data()// receptek és összetevők mentése fileba, formázott alakban tömbből
 {
-    
+    FILE *file1 = fopen("receptek.txt", "w");//receptek mentése
+    if(sizeof(receptek)==0)
+    {
+        printf("Nincs menthető recept az adatbazisban!\n");
+        return;
+    }
+    fprintf(file1, "%d\n", recept_db);
+    for(int i=0;i<recept_db;i++)
+    {
+        fprintf(file1, "%d|%s|%d\n", receptek[i].id, receptek[i].nev, receptek[i].elkeszitesi_ido);
+        fprintf(file1, "%s\n", receptek[i].leiras);
+        fprintf(file1, "%d\n", receptek[i].hozzavalo_db);
+        for(int j=0;j<receptek[i].hozzavalo_db;j++)
+        {
+            fprintf(file1, "%d|%.2lf|%c\n", receptek[i].hozzavalok[j].osszetevo_id, receptek[i].hozzavalok[j].mennyiseg, receptek[i].hozzavalok[j].mertekegyseg);
+        }
+    }
+    fclose(file1);
+
+    FILE *file2 = fopen("osszetevok.txt", "w");//összetevők mentése
+    if(sizeof(osszetevok)==0)
+    {
+        printf("Nincs menthető összetevő az adatbazisban!\n");
+        return;
+    }
+    fprintf(file2, "%d\n", osszetevo_db);
+    for(int i=0;i<osszetevo_db;i++)
+    {
+        fprintf(file2, "%d|%s\n", osszetevok[i].id, osszetevok[i].nev);
+    }
+    fclose(file2);
 }
 
 
@@ -115,7 +145,39 @@ void print_recipe(int recipeid)//recept kirása a konzolra id alapján
 {
     //recept keresése
     recept ki;
-    
+    for(int i=0;i<recept_db;i++)//recept keresése id alapján
+    {
+        if(receptek[i].id==recipeid)
+        {
+            ki=receptek[i];
+            break;
+        }
+    }
+    osszetevo current_osszetevo[ki.hozzavalo_db];
+    for(int i=0;i<ki.hozzavalo_db;i++)//összetevők kigyűjtése tömbbe id alapján
+    {
+        for(int j=0;j<osszetevo_db;j++)
+        {
+            if(ki.hozzavalok[i].osszetevo_id==osszetevok[j].id)
+            {
+                current_osszetevo[i]=osszetevok[j];
+                break;
+            }
+        }
+    }
+
+    //KIÍRÁS FORMÁJA
+    printf("\n=== RECEPT ===\n");
+    printf("Recept neve: %s\n", ki.nev);
+    printf("Elkészítési idő: %d\n", ki.elkeszitesi_ido);
+    printf("Leírás: %s\n", ki.leiras);
+    printf("Hozzávalók:\n");
+    for(int j=0;j<ki.hozzavalo_db;j++)
+    {
+        printf("  %d. %s \t| %.2lf %s\n", j+1, current_osszetevo[j].nev, ki.hozzavalok[j].mennyiseg, ki.hozzavalok[j].mertekegyseg);
+    }
+    printf("=============\n");
+
 
 }
 
