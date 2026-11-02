@@ -140,7 +140,6 @@ void save_data()// receptek és összetevők mentése fileba, formázott alakban
     fclose(file2);
 }
 
-
 void print_recipe(int recipeid)//recept kirása a konzolra id alapján
 {
     //recept keresése
@@ -191,21 +190,41 @@ void new_osszetevo()
 
 }
 
+void delete_one_from_tomb(int index, int *tomb_meret, recept *tomb)
+{
+    if (index < 0 || index >= *tomb_meret) 
+    {
+        printf("Hibas index recept torlesekor!\n");
+        return;
+    }
+
+    for (int i = index; i < *tomb_meret - 1; i++) 
+    {
+        tomb[i] = tomb[i + 1];
+    }
+
+    *tomb_meret--;
+}
+
 void delete_recipe()
 {
 
 }
 
-void keres_nev()// recept keresése név alapján
+void keres_nev()// recept keresése név vagy annak részlete alapján
 {
     char nev[50+1];
     printf("Adja meg a recept nevet: ");
     scanf("%50s", nev);
     for(int i=0;i<recept_db;i++)
     {
-        if(receptek[i].nev==nev)
+        if(strstr(receptek[i].nev, nev) != NULL)
         {
             print_recipe(receptek[i].id);
+        }
+        else
+        {
+            printf("Nincs ilyen nevű recept az adatbázisban!\n");
         }
     }
 }
@@ -213,6 +232,11 @@ void keres_nev()// recept keresése név alapján
 void keres_random()//random recept keresése amíg a felhasználó el nem fogadja
 {
     char accept;
+    recept recept_halmaz[recept_db];
+    for(int i=0;i<recept_db;i++)
+    {
+        recept_halmaz[i]=receptek[i];
+    }
     while(accept!='y')
     {
         srand(time(NULL));
