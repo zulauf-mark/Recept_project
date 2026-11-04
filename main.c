@@ -6,6 +6,7 @@
 #include <time.h>
 #include <string.h>
 
+
 //STRUKTÚRÁK
 typedef struct { //összetevő struktúra
     int id;
@@ -27,6 +28,7 @@ typedef struct { //recept struktúra
     hozzavalo *hozzavalok;
     int hozzavalo_db;
 } recept;
+
 
 //GLOBÁLIS VÁLTOZÓK
 int recept_db=0;
@@ -383,7 +385,7 @@ void keres_random()//random recept keresése amíg a felhasználó el nem fogadj
         random = rand() % halmaz_meret;
         printf("Recept neve: %s\n", recept_halmaz[random].nev);
         printf("Tetszik ez a recept? (y/n):\n(-1 a megszakitas)\n");
-        if(scanf(" %c", &accept) == '-1')
+        if(scanf(" %c", &accept) &&accept=='-1')
         {
             printf("A keresés megszakítva!\n");
             return;
@@ -401,13 +403,42 @@ void keres_random()//random recept keresése amíg a felhasználó el nem fogadj
     print_recipe(random);
 }
 
-void keres_1anyag()
+void keres_1anyag()//1 összetevő alapján keresés a receptek között
 {
-    
+    char osszetevo_nev[50+1];
+    int osszetevo_id;
+    printf("Adja meg az osszetevo nevet: ");
+    scanf("%50s", osszetevo_nev);
+    for(int i=0;i<osszetevo_db;i++)
+    {
+        if(strstr(osszetevok[i].nev, osszetevo_nev) != NULL)
+        {
+            osszetevo_id = osszetevok[i].id;
+        }
+        else
+        {
+            printf("Nincs ilyen nevű osszetevo az adatbázisban!\n");
+        }
+    }
+    for(int i=0;i<recept_db;i++)
+    {
+        for(int j=0;j<receptek[i].hozzavalo_db;j++)
+        {
+            if(receptek[i].hozzavalok[j].osszetevo_id==osszetevo_id)
+            {
+                printf("Recept neve: %d. %s\n", receptek[i].id, receptek[i].nev);
+            }
+        }
+    }
 }
+
 
 void keres_tobbanyag()
 {
+    osszetevo *keresett_osszetevok=NULL;
+    int keresett_osszetevok_db;
+    printf("Adja meg az osszetevo nevet: ");
+    scanf("%d", &keresett_osszetevok_db);
 
 }
 
