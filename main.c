@@ -237,7 +237,7 @@ void new_recipe()
     }
     receptek = receptek_temp;
 
-    //Új recept ID generálása
+    //ID generálása
     int flag=0;
     for(new_recipe.id=0; new_recipe.id<recept_db && flag==0; new_recipe.id++)
     {
@@ -252,7 +252,7 @@ void new_recipe()
     }
 
 
-    //Adatok bekérése a felhasználótól
+    //NEV, ELKÉSZÍTÉSI IDŐ, LEÍRÁS BEOLVASÁSA
     printf("Adja meg a recept nevet: ");
     scanf("%s", new_recipe.nev);
     printf("Adja meg az elkészítési időt: ");
@@ -263,7 +263,7 @@ void new_recipe()
     recept_db++;
 
 
-    //Összetevők hozzáadása a recepthez
+    //OSSZETEVŐK HOZZÁADÁSA
     printf("Osszetevok megadasa:\n");
     char valasz;
     int valasztas, osszetevo_id;
@@ -279,19 +279,22 @@ void new_recipe()
             printf("Adja meg az osszetevo ID-jat, vagy adjon meg egy uj osszetevot(1):\n(-1 a megszakitas)\n");
             switch(scanf("%d", &valasztas))
             {
-                case 1:                                 //Új összetevő hozzáadása az összetevőkhöz, majd a recepthez
+                case 1:                                 
+                //Új összetevő hozzáadása az összetevőkhöz, majd a recepthez
                     new_osszetevo();
                     break;
-                case -1:                                //Megszakítás
+                case -1:                                
+                //Megszakítás
                     printf("A recept hozzaadasa megszakitva!\n");
                     return;
-                default:                                //Kiválasztott összetevő
-                    osszetevo_id=valasztas;
-
+                default:                                
+                //Hozzávaló hozzáadása a recepthez az összetevő ID alapján
+                    hozzavalo uj_hozzavalo = make_hozzavalo(valasztas);
+                    receptek[recept_db-1].hozzavalok = realloc(receptek[recept_db-1].hozzavalok, (receptek[recept_db-1].hozzavalo_db + 1) * sizeof(hozzavalo));
+                    receptek[recept_db-1].hozzavalok[receptek[recept_db-1].hozzavalo_db] = uj_hozzavalo;
+                    receptek[recept_db-1].hozzavalo_db++;
                     break;
             }
-            //Hozzávaló hozzáadása
-            new_osszetevo();
         }
         else
         {
@@ -400,7 +403,7 @@ void keres_random()//random recept keresése amíg a felhasználó el nem fogadj
 
 void keres_1anyag()
 {
-
+    
 }
 
 void keres_tobbanyag()
