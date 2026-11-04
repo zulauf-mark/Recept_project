@@ -140,6 +140,21 @@ void save_data()// receptek és összetevők mentése fileba, formázott alakban
     fclose(file2);
 }
 
+hozzavalo make_hozzavalo(int osszetevo_id)//hozzavalo letrehozasa osszetevo_id alapjan
+{
+    double mennyiseg;
+    char mertekegyseg;
+    hozzavalo uj_hozzavalo;
+    uj_hozzavalo.osszetevo_id=osszetevo_id;
+    printf("Adja meg a hozzavalo mennyiseget:\n");
+    scanf("%lf",&mennyiseg);
+    printf("Adja meg a hozzavalo mertekegyseget:\n");
+    scanf("%s",&mertekegyseg);
+    uj_hozzavalo.mennyiseg=mennyiseg;
+    uj_hozzavalo.mertekegyseg=mertekegyseg;
+    return uj_hozzavalo;
+}
+
 void print_recipe(int recipeid)//recept kirása a konzolra id alapján
 {
     //recept keresése
@@ -178,6 +193,36 @@ void print_recipe(int recipeid)//recept kirása a konzolra id alapján
     printf("=============\n");
 
 
+}
+
+void new_osszetevo()//új összetevő létrehozása és hozzáadása a tömbhöz
+{
+    //új ossztevo helyének lefoglalása
+    osszetevo *osszetevok_temp = realloc(osszetevok, (osszetevo_db + 1) * sizeof(osszetevo));
+    if (osszetevok_temp == NULL) {
+        printf("Hiba a memoriafoglalas soran, uj osszetevo letrehozasakor!\n");
+        return;
+    }
+    osszetevok = osszetevok_temp;
+
+    int flag=0;
+    osszetevo new_osszetevo;
+    //összetevő ID generálása
+    for(new_osszetevo.id=0; new_osszetevo.id<osszetevo_db && flag==0; new_osszetevo.id++)
+    {
+        for(int j=0;j<osszetevo_db+1;j++)
+        {
+            if(osszetevok[j].id==new_osszetevo.id)
+                break;
+            else if(j==osszetevo_db+1)
+                flag=1;
+
+        }
+    }
+    printf("Adja meg az osszetevo nevet:\n");
+    scanf("%s", new_osszetevo.nev);
+    osszetevok[osszetevo_db] = new_osszetevo;
+    osszetevo_db++;
 }
 
 void new_recipe()
@@ -234,13 +279,13 @@ void new_recipe()
             printf("Adja meg az osszetevo ID-jat, vagy adjon meg egy uj osszetevot(1):\n(-1 a megszakitas)\n");
             switch(scanf("%d", &valasztas))
             {
-                case 1:
+                case 1:                                 //Új összetevő hozzáadása az összetevőkhöz, majd a recepthez
                     new_osszetevo();
                     break;
-                case -1:
+                case -1:                                //Megszakítás
                     printf("A recept hozzaadasa megszakitva!\n");
                     return;
-                default:
+                default:                                //Kiválasztott összetevő
                     osszetevo_id=valasztas;
 
                     break;
@@ -254,11 +299,6 @@ void new_recipe()
         }
         printf("Szeretne osszetevot hozzaadni? (y/n)\n");
     }
-}
-
-void new_osszetevo()
-{
-
 }
 
 void delete_one_from_tomb(int index, int *tomb_meret, recept *tomb)//egy elem törlése a tömbből index alapján
