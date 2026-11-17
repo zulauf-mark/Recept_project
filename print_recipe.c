@@ -37,7 +37,7 @@ void print_recipe(int recipeid)
     printf("Hozzávalók:\n");
     for (int j = 0; j < ki.hozzavalo_db; j++)
     {
-        printf("  %d. %s \t| %.2lf %c\n", j + 1, current_osszetevo[j].nev, ki.hozzavalok[j].mennyiseg, ki.hozzavalok[j].mertekegyseg);
+        printf("  %d. %s \t| %.2lf %s\n", j + 1, current_osszetevo[j].nev, ki.hozzavalok[j].mennyiseg, ki.hozzavalok[j].mertekegyseg);
     }
     printf("=============\n");
 }

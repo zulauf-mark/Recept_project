@@ -3,6 +3,6 @@
 
 #include "recipe_types.h"
 
-hozzavalo make_hozzavalo(int osszetevo_id);
+int make_hozzavalo(int osszetevo_id, hozzavalo *result);
 
 #endif

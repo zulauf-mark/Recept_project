@@ -10,6 +10,7 @@
 //HEADER FILES
 #include "delete_one_from_tomb.h"
 #include "delete_recipe.h"
+#include "input.h"
 #include "keres_1anyag.h"
 #include "keres_nev.h"
 #include "keres_random.h"
@@ -44,8 +45,8 @@ int main(void)
         printf("8. Receptek listazasa\n");
         printf("0. Kilepes\n");
 
-        printf("Valasztas: ");
-        scanf("%d", &valasztas);
+        if (!input_read_int("Valasztas: ", 0, 8, &valasztas))
+            break;
 
         switch (valasztas)
         {

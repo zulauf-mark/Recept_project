@@ -22,7 +22,7 @@ void save_data(void)
         fprintf(file1, "%d\n", receptek[i].hozzavalo_db);
         for (int j = 0; j < receptek[i].hozzavalo_db; j++)
         {
-            fprintf(file1, "%d|%.2lf|%c\n", receptek[i].hozzavalok[j].osszetevo_id, receptek[i].hozzavalok[j].mennyiseg, receptek[i].hozzavalok[j].mertekegyseg);
+            fprintf(file1, "%d|%.2lf|%s\n", receptek[i].hozzavalok[j].osszetevo_id, receptek[i].hozzavalok[j].mennyiseg, receptek[i].hozzavalok[j].mertekegyseg);
         }
     }
     fclose(file1);

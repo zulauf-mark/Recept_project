@@ -46,7 +46,7 @@ void load_data(void)
                 case 4:
                     for (int i = 0; i < current_recipe.hozzavalo_db; i++)
                     {
-                        sscanf(line, "%d|%lf|%c\n", &current_recipe.hozzavalok[i].osszetevo_id, &current_recipe.hozzavalok[i].mennyiseg, &current_recipe.hozzavalok[i].mertekegyseg);
+                        sscanf(line, "%d|%lf|%31[^\n]", &current_recipe.hozzavalok[i].osszetevo_id, &current_recipe.hozzavalok[i].mennyiseg, current_recipe.hozzavalok[i].mertekegyseg);
                         fgets(line, sizeof(line), file1);
                     }
                     receptek = realloc(receptek, (size_t)(recept_db + 1) * sizeof(recept));

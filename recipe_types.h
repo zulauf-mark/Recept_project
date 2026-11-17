@@ -9,7 +9,7 @@ typedef struct {
 typedef struct {
     int osszetevo_id;
     double mennyiseg;
-    char mertekegyseg;
+    char mertekegyseg[32];
 } hozzavalo;
 
 typedef struct {

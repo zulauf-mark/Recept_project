@@ -3,15 +3,18 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "input.h"
 #include "print_recipe.h"
 #include "recipe_globals.h"
+
+#include <limits.h>
 
 void keres_nev(void)
 {
     char nev[50 + 1];
     int id;
-    printf("Adja meg a recept nevet: ");
-    scanf("%50s", nev);
+    if (!input_read_text("Adja meg a recept nevet: ", nev, sizeof(nev)))
+        return;
     int found = 0;
     for (int i = 0; i < recept_db; i++)
     {
@@ -24,12 +27,26 @@ void keres_nev(void)
     if (!found)
     {
         printf("Nincs ilyen nevű recept az adatbázisban!\n");
-    }
-    printf("Adja meg a recept ID-ját a részletekhez:\n(-1 a megszakitas)\n");
-    if (scanf("%d", &id) == -1)
-    {
-        printf("A keresés megszakítva!\n");
         return;
     }
-    print_recipe(id);
+
+    while (1)
+    {
+        if (!input_read_int("Adja meg a recept ID-ját a részletekhez (-1 a megszakitas): ", -1, INT_MAX, &id))
+            return;
+        if (id == -1)
+        {
+            printf("A keresés megszakítva!\n");
+            return;
+        }
+        for (int i = 0; i < recept_db; i++)
+        {
+            if (receptek[i].id == id && strstr(receptek[i].nev, nev) != NULL)
+            {
+                print_recipe(id);
+                return;
+            }
+        }
+        printf("Valasszon egy ID-t a fenti talalatok kozul.\n");
+    }
 }
