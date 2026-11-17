@@ -26,8 +26,7 @@ static int append_ingredient(recept *recipe, int ingredient_id)
     if (!make_hozzavalo(ingredient_id, &uj_hozzavalo))
         return 0;
 
-    hozzavalo *temp = realloc(recipe->hozzavalok,
-                              (size_t)(recipe->hozzavalo_db + 1) * sizeof(*recipe->hozzavalok));
+    hozzavalo *temp = realloc(recipe->hozzavalok, (size_t)(recipe->hozzavalo_db + 1) * sizeof(*recipe->hozzavalok));
     if (temp == NULL)
     {
         printf("Hiba a memoriafoglalas soran, hozzavalo hozzaadasakor!\n");
@@ -63,8 +62,7 @@ static int next_recipe_id(int *id)
 
 void new_recipe(void)
 {
-    recept draft = {.id = 0, .nev = "", .leiras = "", .elkeszitesi_ido = 0,
-                    .hozzavalok = NULL, .hozzavalo_db = 0};
+    recept draft = {.id = 0, .nev = "", .leiras = "", .elkeszitesi_ido = 0,.hozzavalok = NULL, .hozzavalo_db = 0};
     int valid_name = 0;
     while (input_read_text("Adja meg a recept nevet: ", draft.nev, sizeof(draft.nev)))
     {
