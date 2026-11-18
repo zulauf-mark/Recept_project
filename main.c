@@ -91,5 +91,6 @@ int main(void)
         }
     } while (valasztas != 0);
 
+    save_data();
     return 0;
 }

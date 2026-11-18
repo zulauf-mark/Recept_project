@@ -74,8 +74,8 @@ void new_recipe(void)
         printf("A recept neve nem tartalmazhat | karaktert.\n");
     }
     if (!valid_name ||
-        !input_read_int("Adja meg az elkészítési időt percben: ", 1, INT_MAX, &draft.elkeszitesi_ido) ||
-        !input_read_text("Adja meg a leírást: ", draft.leiras, sizeof(draft.leiras)))
+        !input_read_int("Adja meg az elkeszitesi idot percben: ", 1, INT_MAX, &draft.elkeszitesi_ido) ||
+        !input_read_text("Adja meg a leirast: ", draft.leiras, sizeof(draft.leiras)))
         return;
 
     printf("Osszetevok megadasa:\n");
@@ -101,8 +101,7 @@ void new_recipe(void)
             printf("%d. %s\n", osszetevok[i].id, osszetevok[i].nev);
 
         char selection[32];
-        if (!input_read_text("Adjon meg egy osszetevo ID-t, 'n' uj osszetevohoz, vagy -1 a megszakitashoz: ",
-                             selection, sizeof(selection)))
+        if (!input_read_text("Adjon meg egy osszetevo ID-t, 'n' uj osszetevohoz, vagy -1 a megszakitashoz: ", selection, sizeof(selection)))
         {
             free(draft.hozzavalok);
             return;

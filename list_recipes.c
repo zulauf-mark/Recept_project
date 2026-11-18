@@ -23,7 +23,7 @@ void list_recipes(void)
     }
     while (1)
     {
-        if (!input_read_int("Adja meg a recept ID-ját a részletekhez (-1 a megszakitas): ", -1, INT_MAX, &id))
+        if (!input_read_int("Adja meg a recept ID-jat a reszletekhez (-1 a megszakitas): ", -1, INT_MAX, &id))
             return;
         if (id == -1)
         {
