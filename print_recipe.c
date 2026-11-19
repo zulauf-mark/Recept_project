@@ -32,9 +32,9 @@ void print_recipe(int recipeid)
 
     printf("\n=== RECEPT ===\n");
     printf("Recept neve: %s\n", ki.nev);
-    printf("Elkészítési idő: %d\n", ki.elkeszitesi_ido);
-    printf("Leírás: %s\n", ki.leiras);
-    printf("Hozzávalók:\n");
+    printf("Elkeszitesi ido: %d\n", ki.elkeszitesi_ido);
+    printf("Leiras: %s\n", ki.leiras);
+    printf("Hozzavalok:\n");
     for (int j = 0; j < ki.hozzavalo_db; j++)
     {
         printf("  %d. %s \t| %.2lf %s\n", j + 1, current_osszetevo[j].nev, ki.hozzavalok[j].mennyiseg, ki.hozzavalok[j].mertekegyseg);

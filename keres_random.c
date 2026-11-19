@@ -68,7 +68,7 @@ void keres_random(void)
         delete_one_from_tomb(delete_index, &halmaz_meret, recept_halmaz);
         if (halmaz_meret == 0)
         {
-            printf("Nincs további recept!\n");
+            printf("Nincs tovabbi recept!\n");
             free(recept_halmaz);
             return;
         }

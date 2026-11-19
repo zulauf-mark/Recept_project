@@ -17,6 +17,8 @@ void keres_tobbanyag(void)
     int j;
     int k;
 
+    int find;
+
     if (osszetevo_db == 0)
     {
         printf("Nincs osszetevo az adatbazisban!\n");
@@ -70,7 +72,7 @@ void keres_tobbanyag(void)
     for (i = 0; i < recept_db; i++)
     {
         int match = 0;
-        int find = 0;
+        find = 0;
         recept draft = receptek[i];
 
         for (k = 0; k < keresett_osszetevok_db; k++)
@@ -88,7 +90,7 @@ void keres_tobbanyag(void)
         if (find == keresett_osszetevok_db)
         {
             printf("Recept neve: %d. %s\n", receptek[i].id, receptek[i].nev);
-            find++
+            find++;
         }
     }
     if(!find)
