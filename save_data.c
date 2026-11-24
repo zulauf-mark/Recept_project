@@ -2,16 +2,21 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "debugmalloc.h"
 #include "recipe_globals.h"
 #include "recipe_types.h"
 
 void save_data(void)
 {
     FILE *file1 = fopen("receptek.txt", "w");
-    if (sizeof(receptek) == 0)
+    if (recept_db == 0)
     {
         printf("Nincs mentheto recept az adatbazisban!\n");
+        return;
+    }
+    if(file1==NULL)
+    {
+        printf("Nem sikerült a fájl megnyitása az adatok mentésénél.\n");
         return;
     }
     fprintf(file1, "%d\n", recept_db);

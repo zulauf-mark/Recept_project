@@ -5,7 +5,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <limits.h>
-
+#include "debugmalloc.h"
 #include "input.h"
 #include "recipe_globals.h"
 #include "recipe_types.h"

@@ -5,6 +5,7 @@
 
 #include "input.h"
 #include "recipe_globals.h"
+#include "debugmalloc.h"
 
 void keres_1anyag(void)
 {

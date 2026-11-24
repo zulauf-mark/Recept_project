@@ -6,6 +6,7 @@
 #include "input.h"
 #include "recipe_globals.h"
 #include "limits.h"
+#include "debugmalloc.h"
 
 void keres_tobbanyag(void)
 {
@@ -87,7 +88,7 @@ void keres_tobbanyag(void)
             }
         }
 
-        if (find == keresett_osszetevok_db)
+        if (match == keresett_osszetevok_db)
         {
             printf("Recept neve: %d. %s\n", receptek[i].id, receptek[i].nev);
             find++;

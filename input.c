@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "debugmalloc.h"
 
 int input_read_text(const char *prompt, char *buffer, size_t size)
 {

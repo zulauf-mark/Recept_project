@@ -1,11 +1,12 @@
 #include "delete_recipe.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "delete_one_from_tomb.h"
 #include "input.h"
 #include "recipe_globals.h"
-
+#include "debugmalloc.h"
 #include <limits.h>
 
 void delete_recipe(void)
@@ -31,6 +32,7 @@ void delete_recipe(void)
     {
         if (receptek[i].id == id)
         {
+            free(receptek[i].hozzavalok);
             delete_one_from_tomb(i, &recept_db, receptek);
             printf("A recept sikeresen torolve lett!\n");
             return;

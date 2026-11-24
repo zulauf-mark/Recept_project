@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "debugmalloc.h"
 #include "input.h"
 #include "make_hozzavalo.h"
 #include "new_osszetevo.h"
@@ -26,7 +26,7 @@ static int append_ingredient(recept *recipe, int ingredient_id)
     if (!make_hozzavalo(ingredient_id, &uj_hozzavalo))
         return 0;
 
-    hozzavalo *temp = realloc(recipe->hozzavalok, (size_t)(recipe->hozzavalo_db + 1) * sizeof(*recipe->hozzavalok));
+    hozzavalo *temp = realloc(recipe->hozzavalok, (size_t)(recipe->hozzavalo_db+1) * sizeof(*recipe->hozzavalok));
     if (temp == NULL)
     {
         printf("Hiba a memoriafoglalas soran, hozzavalo hozzaadasakor!\n");

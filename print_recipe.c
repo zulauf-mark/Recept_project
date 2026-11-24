@@ -1,7 +1,7 @@
 #include "print_recipe.h"
 
 #include <stdio.h>
-
+#include "debugmalloc.h"
 #include "recipe_globals.h"
 #include "recipe_types.h"
 

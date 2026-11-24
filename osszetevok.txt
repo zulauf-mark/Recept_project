@@ -1,6 +1,10 @@
-5
-3|
-0|tojas
-1|olaj
+9
+0|olaj
+1|tojas
 2|so
-4|zsemle
+3|ko
+4|tudas
+5|luck
+6|haircut
+7|felmosorongy
+8|szaabadido

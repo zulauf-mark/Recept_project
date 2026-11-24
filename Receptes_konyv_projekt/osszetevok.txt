@@ -1,0 +1,6 @@
+5
+3|
+0|tojas
+1|olaj
+2|so
+4|zsemle

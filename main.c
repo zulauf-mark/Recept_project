@@ -92,5 +92,9 @@ int main(void)
     } while (valasztas != 0);
 
     save_data();
+    for (int i = 0; i < recept_db; i++)
+        free(receptek[i].hozzavalok);
+    free(receptek);
+    free(osszetevok);
     return 0;
 }

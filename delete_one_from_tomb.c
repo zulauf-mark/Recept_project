@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include "recipe_types.h"
+#include "debugmalloc.h"
 
 void delete_one_from_tomb(int index, int *tomb_meret, void *tomb)
 {

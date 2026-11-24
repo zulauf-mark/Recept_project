@@ -1,0 +1,235 @@
+RECEPTES KÖNYV – SPECIFIKÁCIÓ
+
+1.  A PROGRAM CÉLJA
+
+A program egy digitális receptgyűjtemény kezelésére szolgál. Lehetővé
+teszi a felhasználó számára, hogy ételek receptjeit rögzítse,
+megtekintse, keresse és törölje. A receptekhez tartozó összetevők
+mennyiséggel és mértékegységgel együtt szerepelnek, továbbá minden
+recept tartalmazza az elkészítés módját.
+
+A program az összetevőket közös tömbben tartja nyilván. Új recept
+felvitelekor a már létező összetevők kiválaszthatók, de új összetevő is
+rögzíthető.
+
+A program szöveges, menüvezérelt felületen működik.
+
+2.  INDÍTÁS ÉS FŐMENÜ
+
+Indításkor a program megpróbálja betölteni a korábban elmentett
+receptgyűjteményt. Ezután megjeleníti a főmenüt.
+
+A főmenü az alábbi lehetőségeket tartalmazza:
+
+1.  Új recept felvétele
+2.  Recept keresése név alapján
+3.  Nincs ötletem – véletlenszerű receptajánlás
+4.  De ennék egy kis… – keresés egy összetevő alapján
+5.  El kell használni – keresés több összetevő alapján
+6.  Receptek listázása
+7.  Recept törlése
+8.  Kilépés
+
+A felhasználó a menüpont sorszámának megadásával választ. Érvénytelen
+választás esetén a program hibaüzenetet jelenít meg, majd ismét
+felkínálja a főmenüt.
+
+Az egyes funkciók befejezése után a program visszatér a főmenübe. A
+kilépés menüpont kivételével egyik funkció sem zárja be a programot.
+
+3.  ADATOK ÉS A RECEPTEK FELÉPÍTÉSE
+
+3.1. Összetevők
+
+Minden összetevő egyedi névvel rendelkezik. Példák: liszt, tojás, tej,
+paradicsom.
+
+Az összetevők neve nem lehet üres. A program nem vesz fel ugyanazzal a
+névvel többször összetevőt; a neveket kis- és nagybetűtől függetlenül
+hasonlítja össze.
+
+3.2. Receptek
+
+Minden recept az alábbi adatokat tartalmazza: -A recept azonosítója(id) 
+ Az étel neve. - A hozzávalók listája. - Minden hozzávalóhoz tartozó mennyiség és
+mértékegység. - Az elkészítés módjának szöveges leírása.
+
+Egy recept legalább egy hozzávalót tartalmaz. A mennyiség pozitív szám,
+a mértékegység pedig szöveges adat, például g, kg, ml, dl, db vagy
+evőkanál. Az elkészítés leírása nem lehet üres.
+
+Egy összetevő több receptben is szerepelhet. Egy recepten belül ugyanaz
+az összetevő legfeljebb egyszer szerepelhet; ha a felhasználó ugyanazt
+ismét kiválasztaná, a program jelezze, hogy az összetevő már hozzá lett
+adva.
+
+4.  ÚJ RECEPT FELVÉTELE
+
+A funkció elindításakor a program bekéri az étel nevét.
+
+Ezután a program lehetőséget ad a hozzávalók megadására: - A felhasználó
+megtekintheti a már rögzített összetevők listáját, és sorszám alapján
+kiválaszthat egyet. Vagy létrehozhat egy új összetevőt, és hozzáadhatja azt a recepthez.
+
+Egy hozzávaló kiválasztása után a program bekéri annak mennyiségét és
+mértékegységét. A felhasználó ezután újabb hozzávalót adhat hozzá, vagy
+befejezheti a hozzávalók megadását.
+
+Legalább egy hozzávaló megadása kötelező. A program ezután bekéri az
+elkészítés módját. A leírás több mondatból állhat.
+
+A program a receptet csak akkor menti el, ha minden kötelező adat
+érvényes. Ha a felhasználó megszakítja a felvitelt, a félkész recept nem
+kerül a gyűjteménybe. Sikeres mentés után a program visszajelzést ad.
+
+Ha már létezik azonos nevű recept, a program figyelmezteti a
+felhasználót.
+
+5.  RECEPT KERESÉSE NÉV ALAPJÁN
+
+A program bekéri a keresett étel nevét.
+
+A találatokat a program listában jeleníti meg. A lista minden eleménél
+látható a recept neve. Ha nincs találat, a program erről tájékoztatja a
+felhasználót.
+
+Találat esetén a felhasználó kiválaszthat egy receptet, amelynek
+részletes adatai megjelennek.
+
+6.  „NINCS ÖTLETEM” – VÉLETLENSZERŰ RECEPTAJÁNLÁS
+
+A funkció célja, hogy a program véletlenszerűen ajánljon egy receptet a
+gyűjteményből.
+
+A program megjelenít egy véletlenszerűen kiválasztott ételnevet, majd
+megkérdezi a felhasználót, hogy szeretné-e megtekinteni a receptet.
+
+-   Igen válasz esetén megjelennek a recept részletes adatai.
+-   Nem válasz esetén a program egy másik receptet sorsol.
+
+Ha a gyűjtemény üres, a program tájékoztatja a felhasználót, hogy még
+nincs rögzített recept.
+
+7.  „DE ENNÉK EGY KIS…” – KERESÉS EGY ÖSSZETEVŐ ALAPJÁN
+
+A funkció elindításakor a program megjeleníti a rögzített összetevők
+listáját, és bekéri, hogy a felhasználó melyik összetevő alapján
+szeretne keresni.
+
+A felhasználó a listából választ. A program ezután megkeresi az összes
+olyan receptet, amely tartalmazza a kiválasztott összetevőt, függetlenül
+annak mennyiségétől.
+
+A találatok neve listázva jelenik meg. A felhasználó kiválaszthat egy
+receptet a részletek megtekintéséhez.
+
+Ha nincs olyan recept, amely tartalmazza a kiválasztott összetevőt, a
+program ezt egyértelműen jelzi.
+
+8.  „EL KELL HASZNÁLNI” – KERESÉS TÖBB ÖSSZETEVŐ ALAPJÁN
+
+A funkció lehetővé teszi, hogy a felhasználó egy vagy több összetevőt
+adjon meg, és olyan recepteket keressen, amelyek mindegyiket
+tartalmazzák.
+
+A program megjeleníti az összetevők listáját. A felhasználó kiválasztja
+az első összetevőt, majd további összetevőket is megadhat. A
+kiválasztott összetevők listája folyamatosan látható. Ugyanaz az
+összetevő nem választható ki kétszer.
+
+A keresés akkor indul el, amikor a felhasználó befejezi a kiválasztást.
+A program csak azokat a recepteket jeleníti meg, amelyekben az összes
+kiválasztott összetevő szerepel. Nem elegendő, ha a recept csak néhányat
+tartalmaz közülük.
+
+A találatok listából kiválasztható egy recept, amelynek részletei
+megjelennek.
+
+Ha nincs megfelelő recept, a program erről tájékoztatást ad. Legalább
+egy összetevő kiválasztása kötelező.
+
+9.  RECEPTEK LISTÁZÁSA ÉS RÉSZLETEK MEGJELENÍTÉSE
+
+A receptek listázása menüpont az összes elmentett recept nevét
+megjeleníti.
+
+A felhasználó a listából kiválaszthat egy receptet. A részletes nézet az
+alábbiakat tartalmazza: - Az étel neve. - A hozzávalók neve, mennyisége
+és mértékegysége. - Az elkészítés módjának teljes leírása.
+
+Ha még nincs elmentett recept, a program ezt jelzi.
+
+10. RECEPT TÖRLÉSE
+
+A törlés menüpontban a program megjeleníti a receptek listáját.
+
+A felhasználó kiválasztja a törlendő receptet. A program a törlés előtt
+megjeleníti a recept nevét, és megerősítést kér.
+
+-   Igen válasz esetén a recept törlődik.
+-   Nem válasz esetén a recept változatlanul megmarad.
+
+A recept törlése nem törli automatikusan a hozzá tartozó összetevőket a
+közös összetevőlistából, mivel azokat más receptek is használhatják.
+
+Ha nincs törölhető recept, a program ezt jelzi.
+
+11. ADATMENTÉS ÉS BETÖLTÉS
+
+A program a recepteket és az összetevők listáját fájlban tárolja, hogy
+azok a program bezárása és későbbi újraindítása után is elérhetők
+legyenek.
+
+Indításkor a program betölti a korábban elmentett adatokat a receptek és
+az összetevők számára készített dinamikus tömbben. Ha még nem
+létezik adatfájl, a program üres gyűjteménnyel indul, és tájékoztatja a
+felhasználót arról, hogy még nincs mentett adat.
+
+Új recept sikeres felvétele és recept törlése után a program
+automatikusan elmenti a módosított adatokat. Kilépéskor szintén
+gondoskodik az adatok mentéséről.
+
+A mentésnek tartalmaznia kell: - Az összes összetevő nevét. - Az összes
+recept nevét. - Minden recept valamennyi hozzávalóját, azok
+mennyiségével és mértékegységével. - Az elkészítés módjának teljes
+szövegét.
+
+A mentés UTF-8 kódolású, szöveges fájlban történik. A fájl egyértelműen
+elkülöníti az összetevők adatait, a recepteket, valamint az egyes
+receptek hozzávalóit. A szöveges mezőkben szereplő szóközök és ékezetes
+karakterek megőrződnek. A rekordok és mezők elválasztása olyan
+formátumban történik, amely lehetővé teszi a több szóból álló nevek és
+leírások visszaállítását is.
+
+Ha a fájl nem olvasható vagy hibás formátumú, a program hibaüzenetet
+jelenít meg. Nem használhatja fel csendben a hibásan beolvasott
+adatokat. A felhasználó tájékoztatást kap arról, hogy a korábban mentett
+adatok betöltése nem sikerült. A hibás fájlt nem írhatja felül
+automatikusan az üres gyűjteménnyel.
+
+Ha mentés közben hiba történik, a program jelzi, hogy az adatok mentése
+nem sikerült.
+
+13. KILÉPÉS
+
+A felhasználó a főmenü kilépés menüpontjával zárhatja be a programot.
+
+Kilépés előtt a program elmenti a módosított adatokat, majd elköszönő
+üzenetet jelenít meg és szabályosan befejezi a működését.
+
+14. A PROGRAM ELVÁRT MŰKÖDÉSE – ÖSSZEFOGLALÁS
+
+A program akkor működik megfelelően, ha: - Új receptek rögzíthetők a
+szükséges adatokkal. - A hozzávalók a közös összetevőlistából
+kiválaszthatók, illetve új összetevők is felvehetők. - A receptek név
+alapján kereshetők. - A program véletlenszerű recepteket tud ajánlani
+ismétlés nélkül egy ajánlási folyamaton belül. - Egy összetevő alapján
+kilistázza az azt tartalmazó recepteket. - Több összetevő alapján csak
+az összes megadott összetevőt tartalmazó recepteket listázza. - A
+receptek részletes adatai megtekinthetők. - A receptek megerősítést
+követően törölhetők. - A receptek és az összetevők adatai újraindítás
+után is megmaradnak. - A hibás bemeneteket és a fájlkezelési hibákat
+érthetően jelzi.
+
+A program a fenti funkciókat szöveges, menüvezérelt felületen
+biztosítja.

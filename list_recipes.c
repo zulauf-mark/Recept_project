@@ -5,6 +5,7 @@
 #include "input.h"
 #include "print_recipe.h"
 #include "recipe_globals.h"
+#include "debugmalloc.h"
 
 #include <limits.h>
 

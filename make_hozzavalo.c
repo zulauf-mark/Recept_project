@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
-
+#include "debugmalloc.h"
 #include "input.h"
 
 static int valid_unit(const char *unit)

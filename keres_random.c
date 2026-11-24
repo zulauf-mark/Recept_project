@@ -11,6 +11,7 @@
 #include "print_recipe.h"
 #include "recipe_globals.h"
 #include "recipe_types.h"
+#include "debugmalloc.h"
 
 void keres_random(void)
 {

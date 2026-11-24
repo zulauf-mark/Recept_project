@@ -1,0 +1,221 @@
+RECEPTGYUJTEMENY – PROGRAMOZOI DOKUMENTACIO
+============================================================
+
+Projekt: Recept_project
+Vizsgalt Git-ag: development
+GitHub: https://github.com/zulauf-mark/Recept_project/tree/development
+Dokumentacio keszult: 2026. november 17.
+
+1. A PROGRAM CELJA
+
+A projekt egy konzolos, C nyelven keszulo receptgyujtemeny. A celja, hogy a
+felhasznalo recepteket es a hozzajuk tartozo hozzavalokat tarolhasson,
+megtekintse a recepteket, nev vagy hozzavalo alapjan kereshessen, illetve
+veletlenszeru ajanlast kapjon. A receptekhez nev, elkeszitesi ido, leiras,
+valamint hozzavalolista tartozik. Egy hozzavalohoz az osszetevo azonositoja,
+mennyisege es mertekegysege kerul tarolasra.
+
+A program szoveges menut hasznal. Indulaskor meghivja a load_data()
+fuggvenyt, majd egy ciklusban megjeleniti a menupontokat. A felhasznalo
+sorszam alapjan valaszt, a switch szerkezet pedig meghivja a megfelelo
+funkciot. A funkciok a vegrehajtas utan visszaternek a fomenube.
+
+2. A PROGRAM FELÉPITESE, ADATSTRUKTURAK
+
+A program modulokra van bontva: a fuggvenyek kulon .c fajlokban talalhatok,
+a hozzajuk tartozo deklaraciok pedig kulon .h fejlecekben. A main.c ezeket
+a fejleceket include-olja, es a fomenut, illetve a program vezerleset
+tartalmazza.
+
+A recipe_types.h definialja a fo adatszerkezeteket:
+- osszetevo: egy osszetevo egyedi azonositoja (id) es neve;
+- hozzavalo: az osszetevo azonositoja, a mennyiseg (double) es a
+  mertekegyseg karaktere;
+- recept: azonosito, nev, leiras, elkeszitesi ido, valamint dinamikus
+  hozzavalotomb es annak elemszama.
+
+A recept nem masolja be az osszetevo nevet minden egyes hozzavalohoz,
+hanem az osszetevo ID-jara hivatkozik. Igy egy osszetevo tobb receptben
+is felhasznalhato. A recipe_globals.h deklaralja a kozos globalis
+valtozokat: a receptek es osszetevok darabszamat, valamint a ket dinamikus
+tomb pointeret. Ezek tenyleges definicioja a globals.c fajlban szerepel.
+
+3. FOMODULOK ES FUGGVENYEK
+
+main.c
+A program belepesi pontja. Meghivja a load_data() fuggvenyt, megjeleniti
+a menut, beolvassa a felhasznaloi valasztast, majd a megfelelo funkciot
+futtatja. A jelenlegi menupontok:
+1 – uj recept; 2 – recept torlese; 3 – kereses nev alapjan;
+4 – veletlenszeru ajanlas; 5 – kereses egy osszetevo alapjan;
+6 – kereses tobb osszetevo alapjan; 7 – uj osszetevo;
+8 – receptek listazasa; 0 – kilepes.
+
+new_recipe.c – new_recipe()
+Uj recept felvetelet vegzi. A receptek tombjet realloc() segitsegevel
+megnoveli, bekéri a recept adatait, majd lehetoseget ad hozzavalok
+hozzaadasara. A hozzavaloknal mar letezo osszetevo valaszthato, vagy uj
+osszetevo hozhato letre. A hozzavalok adataihoz a make_hozzavalo()
+fuggvenyt hasznalja.
+
+new_osszetevo.c – new_osszetevo()
+Uj osszetevot vesz fel a kozos osszetevotombbe. A tomb meretet realloc()
+segitsegevel noveli, majd beolvassa az uj osszetevo nevet.
+
+make_hozzavalo.c – make_hozzavalo()
+Egy hozzavalo adatait allitja elo. Parametere az osszetevo ID-ja;
+bekeri a mennyiseget es a mertekegyseget, majd visszaadja a kitoltott
+hozzavalo strukturaerteket.
+
+keres_nev.c – keres_nev()
+Receptnevre keres. A strstr() segitsegevel reszleges nev-egyezest is
+elfogad, kilistazza a talalatokat, majd ID alapjan lehetove teszi a
+reszletek megjeleniteset a print_recipe() fuggvennyel.
+
+keres_random.c – keres_random()
+Veletlenszeruen valaszt receptet, es megkerdezi a felhasznalot, hogy
+megfelel-e az ajanlas. Elutasitas eseten az aktualis jelolt kikerul az
+ideiglenes tombbol, igy ugyanabban az ajanlasi folyamatban nem kerul
+azonnal ujra sorra. A reszleteket a print_recipe() jeleniti meg.
+
+keres_1anyag.c – keres_1anyag()
+Egy megadott osszetevot keres az osszetevok kozott, majd megvizsgalja,
+hogy mely receptek hozzavaloi kozott szerepel az adott osszetevo ID-ja.
+
+keres_tobbanyag.c – keres_tobbanyag()
+A tobb osszetevo alapjan torteno kereses jelenlegi, kezdetleges valtozata.
+A keresesi tomb letrehozasa es a darabszam beolvasasa elkezdodott, de a
+tenyleges receptkereses meg nincs megvalositva.
+
+list_recipes.c – list_recipes()
+Kilistázza a receptek azonositojat es nevet, majd lehetoseget ad egy
+recept kivalasztasara es reszleteinek megtekintesere.
+
+print_recipe.c – print_recipe()
+Receptazonosito alapjan megkeresi a receptet, feloldja a hozzavalokhoz
+tartozo osszetevoazonositokat, majd kiirja a recept nevet, elkeszitesi
+idejet, leirasat, valamint a hozzavalok nevet, mennyiseget es
+mertekegyseget.
+
+delete_recipe.c – delete_recipe()
+Receptazonosito alapjan torli a kivalasztott receptet. A tenyleges
+tombbeli elemeltavolitast a delete_one_from_tomb() vegzi.
+
+delete_one_from_tomb.c – delete_one_from_tomb()
+Altalanos tombeltavolito segedfuggveny: ellenorzi az indexet es a tomb
+pointeret, a torlendo elem utani elemeket egy pozicioval elore masolja,
+majd csokkenti a tomb elemszamat.
+
+load_data.c – load_data()
+A receptek.txt es az osszetevok.txt fajlbol probalja visszatolteni az
+adatokat a dinamikus tombokbe. A fuggveny a program indulasakor hivodik.
+
+save_data.c – save_data()
+A receptek es osszetevok szoveges fajlba irasara keszult. A receptek
+adatait, majd a hozzavalokat is kiirja. A jelenlegi main.c azonban nem
+hivja meg ezt a fuggvenyt, ezert a kilepeskori automatikus mentes
+jelenleg nincs bekotve a program vezerlesebe.
+
+4. MEMORIAKEZELES ES ADATTAROLAS
+
+A receptek, az osszetevok, valamint az egyes receptek hozzavaloi
+dinamikus tombokben tarolodnak. A tombok meretenek novelesehez a program
+realloc()-ot hasznal. A realloc() eredmenyet ideiglenes pointerben kell
+fogadni, mert sikertelen memoriafoglalas eseten NULL erteket adhat
+vissza; a jelenlegi uj recept es uj osszetevo modul ezt a mintat
+alkalmazza. A recept strukturan beluli hozzavalotomb szinten dinamikus.
+
+A debugmalloc.h bekerult a projektbe, es a main.c include-olja.
+Ez a memoriafoglalasok ellenorzeset, illetve a memoriahibak
+felderiteset segito fejlesztoi eszkoz.
+
+A fajlkezeles celja, hogy az adatok a program ujrainditasa utan is
+megmaradjanak. A jelenlegi kodban a beolvasas es kiiras kulon modulba
+kerult, de a fajlkezeles es a program vezerlese meg nincs teljesen
+osszehangolva.
+
+5. FEJLESZTESI TÖRTENET A COMMITOK ALAPJAN
+
+A commitok alapjan a fejlesztes 2026. oktober 14-en egy programvazzal,
+fuggvenyekkel es kezdetleges menurendszerrel indult. Oktober 15-en
+elkeszult a strukturak es a fajlbol torteno betoltes elso valtozata.
+Oktober 17-en a betoltesi es mentesi logika atdolgozasa kovetkezett.
+
+Oktober 20–22. kozott a load, save es print funkciok fejlodtek, a
+receptadatok mellett az osszetevok tarolasanak tamogatasa is bekerult.
+November 2-an elkeszult, illetve tovabbfejlodott a nev szerinti kereses,
+a veletlenszeru ajanlas, a recepttorles, a tomb egy elemének torlese
+es a receptek listazasa. A funkciokhoz megszakitasi lehetoseg is kerult.
+
+November 3–4. kozott az uj recept felvetele, az uj osszetevo letrehozasa
+es a hozzavalo osszeallitasa fejlodott. November 4-en az egy osszetevo
+alapjan torteno kereses elkeszultnek lett jelolve, a tobb osszetevos
+kereses pedig elkezdodott. November 15-en bekerult a debugmalloc
+memoriaellenorzo fejlece. A november 17-i commit a fuggvenyeket kulon
+.c es .h fajlokba szervezte, es a modulokat a main.c-hez kapcsolta.
+
+A commituzenetek tobb alkalommal kifejezetten jelzik, hogy az adott
+funkciok nem voltak tesztelve. Ezert a commitban szereplo „kesz”
+megjeloles nem tekintheto automatikusan teljes koru tesztelesi
+igazolasnak.
+
+6. ISMERT HIBAK ES JAVITANDO FELADATOK
+
+- A keres_tobbanyag() fuggveny befejezetlen: a kivalasztott osszetevok
+  tarolasa es a megfelelo receptek szurese meg hianyzik.
+- A main.c jelenleg nem hivja meg a save_data() fuggvenyt. A kilepeskor
+  torteno mentes bekotese szukseges.
+- A load_data() betoltesi logikajat at kell nezni. A receptszamlalo,
+  a rekordok tombbe helyezese, a hozzavalok beolvasasa es a memoriafoglalas
+  jelenlegi kezelese nem megbizhato. Az osszetevok beolvasasanal a ciklus
+  csak egy sort dolgoz fel, mert a fajlbeolvaso ciklusban break szerepel.
+- A save_data() fajlmegnyitasi hibajat ellenorizni kell. A sizeof(pointer)
+  nem alkalmas annak megallapitasara, hogy egy dinamikus tomb ures-e;
+  ehhez a tomb elemszamat vagy a pointer NULL erteket kell vizsgalni.
+- A print_recipe() ervenytelen vagy nem letezo ID eseten nem ad megfelelo
+  hibakezelest; a helyi receptvaltozo inicializalatlan maradhat.
+- A scanf() visszateresi ertekenek ellenorzese tobb helyen javitando.
+  A felhasznaloi szovegek beolvasasanal a szokozoket tartalmazo nevek es
+  leirasok kezelese is fejlesztendo.
+- A dinamikus tombok es a receptek hozzavalotombjeinek felszabaditasat
+  es a realloc() hibait minden erintett modulban kovetkezetesen kezelni
+  kell.
+- A recept- es osszetevoazonositok kiosztasat egyertelmuen, egyediseget
+  garantalva kell megoldani.
+- A specifikacio tobb elvart funkciot is tartalmaz, amely a jelenlegi
+  kodban meg nem vagy csak reszben jelenik meg (peldaul torles elotti
+  megerosites, kotelezo adatok ellenorzese, ures gyujtemeny kezelese,
+  fajlhibak biztonsagos kezelese).
+- A menupontok sorrendjet es a specifikacioban szereplo sorrendet
+  erdemes egységesiteni.
+
+7. TESZTELESI JAVASLAT
+
+A kovetkezo eseteket kulon erdemes kiprobalni:
+1. Ures adatbazissal torteno inditas.
+2. Egy recept felvetele tobb hozzavaloval.
+3. Uj osszetevo felvetele, majd felhasznalasa egy receptben.
+4. Kereses letezo es nem letezo receptnevvel.
+5. Kereses olyan osszetevore, amely egy vagy tobb receptben szerepel.
+6. Veletlenszeru ajanlas ures, egy elemu es tobb elemu receptlistaval.
+7. Recept torlese ervenyes es ervenytelen ID-val.
+8. Betoltes es mentes ellenorzese programujrainditas utan.
+9. Hibás fajl, ervenytelen szam, tul hosszu szoveg es megszakitott
+   felhasznaloi bevitel kezelese.
+10. Memoriafoglalasok es felszabaditasok ellenorzese debugmalloc
+    segitsegevel.
+
+8. OSSZEGZES
+
+A projekt mar rendelkezik a receptgyujtemeny alapveto szerkezetevel,
+a menurendszerrel es tobb fontos kezelofunkcio kulon modulba szervezett
+valtozataval. A fejlesztes egyik fontos eredmenye a dinamikus
+adatszerkezetek hasznalata, valamint a receptek es osszetevok
+azonosito alapjan torteno osszekapcsolasa. A kovetkezo fejlesztesi
+szakasz fo feladata a tobb osszetevos kereses befejezese, a fajlkezeles
+megbizhato mukodesenek helyreallitasa, a hibakezeles kiegeszitese es
+a funkciok rendszeres tesztelese.
+
+Megjegyzes: A dokumentacio a development ag 2026. november 17-i
+allapotat irja le. A fejlesztes folytatasaval a funkciok es az ismert
+hibak listaja valtozhat.
