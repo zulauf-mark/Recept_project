@@ -8,7 +8,6 @@
 #include "input.h"
 #include "make_hozzavalo.h"
 #include "new_osszetevo.h"
-#include "recipe_globals.h"
 #include "recipe_types.h"
 
 static int append_ingredient(recept *recipe, int ingredient_id)
@@ -37,14 +36,14 @@ static int append_ingredient(recept *recipe, int ingredient_id)
     return 1;
 }
 
-static int next_recipe_id(int *id)
+static int next_recipe_id(const recipe_data *data, int *id)
 {
     for (int candidate = 0; ; candidate++)
     {
         int used = 0;
-        for (int i = 0; i < recept_db; i++)
+        for (int i = 0; i < data->recept_db; i++)
         {
-            if (receptek[i].id == candidate)
+            if (data->receptek[i].id == candidate)
             {
                 used = 1;
                 break;
@@ -60,7 +59,7 @@ static int next_recipe_id(int *id)
     }
 }
 
-void new_recipe(void)
+void new_recipe(recipe_data *data)
 {
     recept draft = {.id = 0, .nev = "", .leiras = "", .elkeszitesi_ido = 0,.hozzavalok = NULL, .hozzavalo_db = 0};
     int valid_name = 0;
@@ -97,8 +96,8 @@ void new_recipe(void)
             break;
         }
 
-        for (int i = 0; i < osszetevo_db; i++)
-            printf("%d. %s\n", osszetevok[i].id, osszetevok[i].nev);
+        for (int i = 0; i < data->osszetevo_db; i++)
+            printf("%d. %s\n", data->osszetevok[i].id, data->osszetevok[i].nev);
 
         char selection[32];
         if (!input_read_text("Adjon meg egy osszetevo ID-t, 'n' uj osszetevohoz, vagy -1 a megszakitashoz: ", selection, sizeof(selection)))
@@ -116,11 +115,11 @@ void new_recipe(void)
         int ingredient_id;
         if (strcmp(selection, "n") == 0 || strcmp(selection, "N") == 0)
         {
-            int previous_count = osszetevo_db;
-            new_osszetevo();
-            if (osszetevo_db == previous_count)
+            int previous_count = data->osszetevo_db;
+            new_osszetevo(data);
+            if (data->osszetevo_db == previous_count)
                 continue;
-            ingredient_id = osszetevok[osszetevo_db - 1].id;
+            ingredient_id = data->osszetevok[data->osszetevo_db - 1].id;
         }
         else
         {
@@ -130,8 +129,8 @@ void new_recipe(void)
                 continue;
             }
             int exists = 0;
-            for (int i = 0; i < osszetevo_db; i++)
-                if (osszetevok[i].id == ingredient_id)
+            for (int i = 0; i < data->osszetevo_db; i++)
+                if (data->osszetevok[i].id == ingredient_id)
                     exists = 1;
             if (!exists)
             {
@@ -147,20 +146,20 @@ void new_recipe(void)
         }
     }
 
-    if (!next_recipe_id(&draft.id))
+    if (!next_recipe_id(data, &draft.id))
     {
         printf("Nem hozhato letre uj recept: elfogytak az azonosito-k.\n");
         free(draft.hozzavalok);
         return;
     }
-    recept *temp = realloc(receptek, (size_t)(recept_db + 1) * sizeof(*receptek));
+    recept *temp = realloc(data->receptek, (size_t)(data->recept_db + 1) * sizeof(*data->receptek));
     if (temp == NULL)
     {
         printf("Hiba a memoriafoglalas soran, uj recept letrehozasakor!\n");
         free(draft.hozzavalok);
         return;
     }
-    receptek = temp;
-    receptek[recept_db++] = draft;
+    data->receptek = temp;
+    data->receptek[data->recept_db++] = draft;
     printf("A recept sikeresen hozzaadva.\n");
 }

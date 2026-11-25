@@ -4,10 +4,10 @@
 #include <stdlib.h>
 
 #include "input.h"
-#include "recipe_globals.h"
+#include "recipe_types.h"
 #include "limits.h"
 
-void keres_tobbanyag(void)
+void keres_tobbanyag(const recipe_data *data)
 {
     osszetevo *keresett_osszetevok = NULL;
     int keresett_osszetevok_db;
@@ -19,13 +19,13 @@ void keres_tobbanyag(void)
 
     int find;
 
-    if (osszetevo_db == 0)
+    if (data->osszetevo_db == 0)
     {
         printf("Nincs osszetevo az adatbazisban!\n");
         return;
     }
 
-    if (!input_read_int("Adja meg a keresett osszetevok szamat: ", 1, osszetevo_db, &keresett_osszetevok_db))
+    if (!input_read_int("Adja meg a keresett osszetevok szamat: ", 1, data->osszetevo_db, &keresett_osszetevok_db))
     {
         printf("A keresett osszetevok szamat nem adta meg, a keresest megszakitjuk.\n");
         return;
@@ -40,8 +40,8 @@ void keres_tobbanyag(void)
 
     for (i = 0; i < keresett_osszetevok_db; i++)
     {
-        for (j = 0; j < osszetevo_db; j++)
-            printf("%d. %s\n", osszetevok[j].id, osszetevok[j].nev);
+        for (j = 0; j < data->osszetevo_db; j++)
+            printf("%d. %s\n", data->osszetevok[j].id, data->osszetevok[j].nev);
 
         if (!input_read_int("Adja meg a keresett osszetevo ID-t: ", 0, INT_MAX, &osszetevo_id))
         {
@@ -51,11 +51,11 @@ void keres_tobbanyag(void)
         }
 
         talalat = 0;
-        for (j = 0; j < osszetevo_db; j++)
+        for (j = 0; j < data->osszetevo_db; j++)
         {
-            if (osszetevo_id == osszetevok[j].id)
+            if (osszetevo_id == data->osszetevok[j].id)
             {
-                keresett_osszetevok[i] = osszetevok[j];
+                keresett_osszetevok[i] = data->osszetevok[j];
                 talalat = 1;
                 break;
             }
@@ -69,11 +69,11 @@ void keres_tobbanyag(void)
         }
     }
 
-    for (i = 0; i < recept_db; i++)
+    for (i = 0; i < data->recept_db; i++)
     {
         int match = 0;
         find = 0;
-        recept draft = receptek[i];
+        recept draft = data->receptek[i];
 
         for (k = 0; k < keresett_osszetevok_db; k++)
         {
@@ -89,7 +89,7 @@ void keres_tobbanyag(void)
 
         if (find == keresett_osszetevok_db)
         {
-            printf("Recept neve: %d. %s\n", receptek[i].id, receptek[i].nev);
+            printf("Recept neve: %d. %s\n", data->receptek[i].id, data->receptek[i].nev);
             find++;
         }
     }

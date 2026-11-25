@@ -4,23 +4,23 @@
 
 #include "input.h"
 #include "print_recipe.h"
-#include "recipe_globals.h"
+#include "recipe_types.h"
 #include "debugmalloc.h"
 
 #include <limits.h>
 
-void list_recipes(void)
+void list_recipes(const recipe_data *data)
 {
-    if (recept_db == 0)
+    if (data->recept_db == 0)
     {
         printf("Nincs recept az adatbazisban!\n");
         return;
     }
 
     int id;
-    for (int i = 0; i < recept_db; i++)
+    for (int i = 0; i < data->recept_db; i++)
     {
-        printf("%d. %s\n", receptek[i].id, receptek[i].nev);
+        printf("%d. %s\n", data->receptek[i].id, data->receptek[i].nev);
     }
     while (1)
     {
@@ -31,11 +31,11 @@ void list_recipes(void)
             printf("A keresés megszakítva!\n");
             return;
         }
-        for (int i = 0; i < recept_db; i++)
+        for (int i = 0; i < data->recept_db; i++)
         {
-            if (receptek[i].id == id)
+            if (data->receptek[i].id == id)
             {
-                print_recipe(id);
+                print_recipe(data, id);
                 return;
             }
         }

@@ -1,6 +1,8 @@
 #ifndef LIST_RECIPES_H
 #define LIST_RECIPES_H
 
-void list_recipes(void);
+#include "recipe_types.h"
+
+void list_recipes(const recipe_data *data);
 
 #endif

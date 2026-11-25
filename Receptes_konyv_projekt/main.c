@@ -21,7 +21,6 @@
 #include "new_osszetevo.h"
 #include "new_recipe.h"
 #include "print_recipe.h"
-#include "recipe_globals.h"
 #include "recipe_types.h"
 #include "save_data.h"
 
@@ -29,8 +28,9 @@
 int main(void)
 {
     int valasztas;
+    recipe_data data = {0};
 
-    load_data();
+    load_data(&data);
 
     do
     {
@@ -51,35 +51,35 @@ int main(void)
         switch (valasztas)
         {
             case 1:
-                new_recipe();
+                new_recipe(&data);
                 break;
 
             case 2:
-                delete_recipe();
+                delete_recipe(&data);
                 break;
 
             case 3:
-                keres_nev();
+                keres_nev(&data);
                 break;
 
             case 4:
-                keres_random();
+                keres_random(&data);
                 break;
 
             case 5:
-                keres_1anyag();
+                keres_1anyag(&data);
                 break;
 
             case 6:
-                keres_tobbanyag();
+                keres_tobbanyag(&data);
                 break;
 
             case 7:
-                new_osszetevo();
+                new_osszetevo(&data);
                 break;
 
             case 8:
-                list_recipes();
+                list_recipes(&data);
                 break;
 
             case 0:
@@ -91,6 +91,6 @@ int main(void)
         }
     } while (valasztas != 0);
 
-    save_data();
+    save_data(&data);
     return 0;
 }

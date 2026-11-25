@@ -2,17 +2,16 @@
 
 #include <stdio.h>
 #include "debugmalloc.h"
-#include "recipe_globals.h"
 #include "recipe_types.h"
 
-void print_recipe(int recipeid)
+void print_recipe(const recipe_data *data, int recipeid)
 {
     recept ki;
-    for (int i = 0; i < recept_db; i++)
+    for (int i = 0; i < data->recept_db; i++)
     {
-        if (receptek[i].id == recipeid)
+        if (data->receptek[i].id == recipeid)
         {
-            ki = receptek[i];
+            ki = data->receptek[i];
             break;
         }
     }
@@ -20,11 +19,11 @@ void print_recipe(int recipeid)
     osszetevo current_osszetevo[ki.hozzavalo_db];
     for (int i = 0; i < ki.hozzavalo_db; i++)
     {
-        for (int j = 0; j < osszetevo_db; j++)
+        for (int j = 0; j < data->osszetevo_db; j++)
         {
-            if (ki.hozzavalok[i].osszetevo_id == osszetevok[j].id)
+            if (ki.hozzavalok[i].osszetevo_id == data->osszetevok[j].id)
             {
-                current_osszetevo[i] = osszetevok[j];
+                current_osszetevo[i] = data->osszetevok[j];
                 break;
             }
         }

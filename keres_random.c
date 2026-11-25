@@ -9,29 +9,28 @@
 #include "delete_one_from_tomb.h"
 #include "input.h"
 #include "print_recipe.h"
-#include "recipe_globals.h"
 #include "recipe_types.h"
 #include "debugmalloc.h"
 
-void keres_random(void)
+void keres_random(const recipe_data *data)
 {
-    if (recept_db == 0)
+    if (data->recept_db == 0)
     {
         printf("Nincs recept az adatbazisban!\n");
         return;
     }
 
     char accept = 'n';
-    recept *recept_halmaz = malloc((size_t)recept_db * sizeof(*recept_halmaz));
+    recept *recept_halmaz = malloc((size_t)data->recept_db * sizeof(*recept_halmaz));
     if (recept_halmaz == NULL)
     {
         printf("Hiba a memoriafoglalas soran!\n");
         return;
     }
-    int delete_index, random, halmaz_meret = recept_db;
-    for (int i = 0; i < recept_db; i++)
+    int delete_index, random, halmaz_meret = data->recept_db;
+    for (int i = 0; i < data->recept_db; i++)
     {
-        recept_halmaz[i] = receptek[i];
+        recept_halmaz[i] = data->receptek[i];
     }
 
     srand((unsigned int)time(NULL));
@@ -61,7 +60,7 @@ void keres_random(void)
         accept = (char)tolower((unsigned char)answer[0]);
         if (accept == 'y')
         {
-            print_recipe(recept_halmaz[random].id);
+            print_recipe(data, recept_halmaz[random].id);
             free(recept_halmaz);
             return;
         }

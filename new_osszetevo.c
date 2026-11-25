@@ -7,7 +7,6 @@
 #include <limits.h>
 #include "debugmalloc.h"
 #include "input.h"
-#include "recipe_globals.h"
 #include "recipe_types.h"
 
 static int names_equal(const char *left, const char *right)
@@ -22,7 +21,7 @@ static int names_equal(const char *left, const char *right)
     return *left == *right;
 }
 
-void new_osszetevo(void)
+void new_osszetevo(recipe_data *data)
 {
     osszetevo new_osszetevo;
     int valid_name = 0;
@@ -37,9 +36,9 @@ void new_osszetevo(void)
     }
     if (!valid_name)
         return;
-    for (int i = 0; i < osszetevo_db; i++)
+    for (int i = 0; i < data->osszetevo_db; i++)
     {
-        if (names_equal(osszetevok[i].nev, new_osszetevo.nev))
+        if (names_equal(data->osszetevok[i].nev, new_osszetevo.nev))
         {
             printf("Ilyen nevu osszetevo mar szerepel az adatbazisban!\n");
             return;
@@ -50,9 +49,9 @@ void new_osszetevo(void)
     while (1)
     {
         int used = 0;
-        for (int i = 0; i < osszetevo_db; i++)
+        for (int i = 0; i < data->osszetevo_db; i++)
         {
-            if (osszetevok[i].id == new_osszetevo.id)
+            if (data->osszetevok[i].id == new_osszetevo.id)
             {
                 used = 1;
                 break;
@@ -68,13 +67,13 @@ void new_osszetevo(void)
         new_osszetevo.id++;
     }
 
-    osszetevo *osszetevok_temp = realloc(osszetevok, (size_t)(osszetevo_db + 1) * sizeof(osszetevo));
+    osszetevo *osszetevok_temp = realloc(data->osszetevok, (size_t)(data->osszetevo_db + 1) * sizeof(osszetevo));
     if (osszetevok_temp == NULL)
     {
         printf("Hiba a memoriafoglalas soran, uj osszetevo letrehozasakor!\n");
         return;
     }
-    osszetevok = osszetevok_temp;
-    osszetevok[osszetevo_db] = new_osszetevo;
-    osszetevo_db++;
+    data->osszetevok = osszetevok_temp;
+    data->osszetevok[data->osszetevo_db] = new_osszetevo;
+    data->osszetevo_db++;
 }

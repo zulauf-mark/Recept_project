@@ -22,4 +22,11 @@ typedef struct {
     int hozzavalo_db;
 } recept;
 
+typedef struct {
+    int recept_db;
+    int osszetevo_db;
+    recept *receptek;
+    osszetevo *osszetevok;
+} recipe_data;
+
 #endif

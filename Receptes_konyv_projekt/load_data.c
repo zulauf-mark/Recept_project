@@ -4,10 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "recipe_globals.h"
 #include "recipe_types.h"
 
-void load_data(void)
+void load_data(recipe_data *data)
 {
     FILE *file1 = fopen("receptek.txt", "r");
     if (file1 == NULL)
@@ -23,7 +22,7 @@ void load_data(void)
         recept current_recipe = {.id = 0, .nev = "", .leiras = "", .elkeszitesi_ido = 0, .hozzavalok = NULL, .hozzavalo_db = 0};
         if (line_num == 0)
         {
-            sscanf(line, "%d\n", &recept_db);
+            sscanf(line, "%d\n", &data->recept_db);
             line_num++;
         }
         else
@@ -49,8 +48,8 @@ void load_data(void)
                         sscanf(line, "%d|%lf|%31[^\n]", &current_recipe.hozzavalok[i].osszetevo_id, &current_recipe.hozzavalok[i].mennyiseg, current_recipe.hozzavalok[i].mertekegyseg);
                         fgets(line, sizeof(line), file1);
                     }
-                    receptek = realloc(receptek, (size_t)(recept_db + 1) * sizeof(recept));
-                    receptek[recept_db] = current_recipe;
+                    data->receptek = realloc(data->receptek, (size_t)(data->recept_db + 1) * sizeof(recept));
+                    data->receptek[data->recept_db] = current_recipe;
                     line_num = 1;
                     break;
             }
@@ -68,9 +67,9 @@ void load_data(void)
     {
         osszetevo current_osszetevo = {.id = 0, .nev = ""};
         sscanf(line, "%d|%[^|]\n", &current_osszetevo.id, current_osszetevo.nev);
-        osszetevok = realloc(osszetevok, (size_t)(osszetevo_db + 1) * sizeof(osszetevo));
-        osszetevok[osszetevo_db] = current_osszetevo;
-        osszetevo_db++;
+        data->osszetevok = realloc(data->osszetevok, (size_t)(data->osszetevo_db + 1) * sizeof(osszetevo));
+        data->osszetevok[data->osszetevo_db] = current_osszetevo;
+        data->osszetevo_db++;
         break;
     }
     fclose(file2);

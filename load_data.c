@@ -4,11 +4,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "recipe_globals.h"
 #include "recipe_types.h"
 #include "debugmalloc.h"
 
-void load_data(void)
+void load_data(recipe_data *data)
 {
     FILE *file1 = fopen("receptek.txt", "r");
     if (file1 == NULL)//Ellenőrzés
@@ -19,27 +18,27 @@ void load_data(void)
 
     char line[2001];
     if (fgets(line, sizeof(line), file1) == NULL ||
-        sscanf(line, "%d", &recept_db) != 1 ||
-        recept_db < 0)
+        sscanf(line, "%d", &data->recept_db) != 1 ||
+        data->recept_db < 0)
     {
         printf("Hibas receptadatbazis!\n");
         fclose(file1);
-        recept_db = 0;
-        receptek = NULL;
+        data->recept_db = 0;
+        data->receptek = NULL;
         return;
     }
 
-    receptek = recept_db > 0 ? malloc((size_t)recept_db * sizeof(recept)) : NULL;
-    if (recept_db > 0 && receptek == NULL)
+    data->receptek = data->recept_db > 0 ? malloc((size_t)data->recept_db * sizeof(recept)) : NULL;
+    if (data->recept_db > 0 && data->receptek == NULL)
     {
         printf("Hiba a memoriafoglalas soran, receptadatbazis betoltesehez!\n");
         fclose(file1);
-        recept_db = 0;
+        data->recept_db = 0;
         return;
     }
 
     int loaded_recipes = 0;
-    for (int i = 0; i < recept_db; i++)
+    for (int i = 0; i < data->recept_db; i++)
     {
         recept current_recipe = {
             .id = 0, .nev = "", .leiras = "",
@@ -89,16 +88,16 @@ void load_data(void)
             break;
         }
 
-        receptek[loaded_recipes++] = current_recipe;
+        data->receptek[loaded_recipes++] = current_recipe;
     }
 
-    if (loaded_recipes != recept_db)
+    if (loaded_recipes != data->recept_db)
     {
         for (int i = 0; i < loaded_recipes; i++)
-            free(receptek[i].hozzavalok);
-        free(receptek);
-        receptek = NULL;
-        recept_db = 0;
+            free(data->receptek[i].hozzavalok);
+        free(data->receptek);
+        data->receptek = NULL;
+        data->recept_db = 0;
         printf("Hibas receptadatbazis!\n");
     }
     fclose(file1);
@@ -111,29 +110,29 @@ void load_data(void)
     }
 
     if (fgets(line, sizeof(line), file2) == NULL ||
-        sscanf(line, "%d", &osszetevo_db) != 1 ||
-        osszetevo_db < 0)
+        sscanf(line, "%d", &data->osszetevo_db) != 1 ||
+        data->osszetevo_db < 0)
     {
         printf("Hibas osszetevo-adatbazis!\n");
         fclose(file2);
-        osszetevo_db = 0;
-        osszetevok = NULL;
+        data->osszetevo_db = 0;
+        data->osszetevok = NULL;
         return;
     }
 
-    osszetevok = osszetevo_db > 0
-        ? malloc((size_t)osszetevo_db * sizeof(osszetevo))
+    data->osszetevok = data->osszetevo_db > 0
+        ? malloc((size_t)data->osszetevo_db * sizeof(osszetevo))
         : NULL;
-    if (osszetevo_db > 0 && osszetevok == NULL)
+    if (data->osszetevo_db > 0 && data->osszetevok == NULL)
     {
         printf("Hiba a memoriafoglalas soran, osszetevo-adatbazis betoltesehez!\n");
         fclose(file2);
-        osszetevo_db = 0;
+        data->osszetevo_db = 0;
         return;
     }
 
     int loaded_ingredients = 0;
-    for (int i = 0; i < osszetevo_db; i++)
+    for (int i = 0; i < data->osszetevo_db; i++)
     {
         osszetevo current_osszetevo = {.id = 0, .nev = ""};
         if (fgets(line, sizeof(line), file2) == NULL ||
@@ -141,14 +140,14 @@ void load_data(void)
                    &current_osszetevo.id, current_osszetevo.nev) != 2)
             break;
 
-        osszetevok[loaded_ingredients++] = current_osszetevo;
+        data->osszetevok[loaded_ingredients++] = current_osszetevo;
     }
 
-    if (loaded_ingredients != osszetevo_db)
+    if (loaded_ingredients != data->osszetevo_db)
     {
-        free(osszetevok);
-        osszetevok = NULL;
-        osszetevo_db = 0;
+        free(data->osszetevok);
+        data->osszetevok = NULL;
+        data->osszetevo_db = 0;
         printf("Hibas osszetevo-adatbazis!\n");
     }
     fclose(file2);

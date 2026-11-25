@@ -5,22 +5,22 @@
 
 #include "input.h"
 #include "print_recipe.h"
-#include "recipe_globals.h"
+#include "recipe_types.h"
 
 #include <limits.h>
 
-void keres_nev(void)
+void keres_nev(const recipe_data *data)
 {
     char nev[50 + 1];
     int id;
     if (!input_read_text("Adja meg a recept nevet: ", nev, sizeof(nev)))
         return;
     int found = 0;
-    for (int i = 0; i < recept_db; i++)
+    for (int i = 0; i < data->recept_db; i++)
     {
-        if (strstr(receptek[i].nev, nev) != NULL)
+        if (strstr(data->receptek[i].nev, nev) != NULL)
         {
-            printf("Recept neve: %d. %s\n", receptek[i].id, receptek[i].nev);
+            printf("Recept neve: %d. %s\n", data->receptek[i].id, data->receptek[i].nev);
             found = 1;
         }
     }
@@ -39,11 +39,11 @@ void keres_nev(void)
             printf("A keresés megszakítva!\n");
             return;
         }
-        for (int i = 0; i < recept_db; i++)
+        for (int i = 0; i < data->recept_db; i++)
         {
-            if (receptek[i].id == id && strstr(receptek[i].nev, nev) != NULL)
+            if (data->receptek[i].id == id && strstr(data->receptek[i].nev, nev) != NULL)
             {
-                print_recipe(id);
+                print_recipe(data, id);
                 return;
             }
         }

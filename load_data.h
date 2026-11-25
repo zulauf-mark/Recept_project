@@ -1,6 +1,8 @@
 #ifndef LOAD_DATA_H
 #define LOAD_DATA_H
 
-void load_data(void);
+#include "recipe_types.h"
+
+void load_data(recipe_data *data);
 
 #endif
